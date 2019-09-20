@@ -1,0 +1,68 @@
+.logo {
+
+    &__container {
+
+        text-align: center;
+        position: relative;
+        padding: 2rem;
+
+    }
+
+    &__back-image {
+
+        width: 95%;
+        height: auto;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        transform: rotate(79deg) translate(0rem, 4%);
+
+        filter: brightness(0.65);
+
+
+    }
+
+    &__vault-image {
+        width: 50%;
+        height: auto;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+
+        transform: translate(50%, -23%) scale(1.40);
+        filter: blur(1px);
+        border-radius: 5px;
+    }
+
+    &__inner-image {
+        width: 50%;
+        height: auto;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+
+        transform: translate(51%, -35%) scale(.8) rotate(13deg);
+
+        &--rotate {
+
+            @keyframes infiniteRotateAnticlockwise {
+                0%{
+
+                    transform: translate(51%, -35%) scale(.65) rotate(0deg);
+                }
+
+                // 50%{
+
+                //     transform: rotate(180deg);
+                // }
+
+                100% {
+                    transform: translate(51%, -35%) scale(.65) rotate(-360deg);
+                }
+            }
+
+            animation: infiniteRotateAnticlockwise 5s linear infinite;
+        }
+    }
+}
+
