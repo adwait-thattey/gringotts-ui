@@ -29,6 +29,7 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^6.4.0",
     "node-sass": "^4.12.0"
   }
 }

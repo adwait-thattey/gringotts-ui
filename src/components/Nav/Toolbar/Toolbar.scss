@@ -1,0 +1,79 @@
+.toolbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width:100%;
+    background: rgb(54, 51, 51);
+    height: 7rem;
+
+    font-size: 2rem;
+
+    &__navigation {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        padding: 0 1rem;
+
+        &-items {
+
+
+            & ul{
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+            }
+
+            & li{
+                padding: 0 0.5rem
+            }
+
+            & a{
+                color: white;
+                text-decoration: none;
+            }
+
+            & a:hover,
+            & a:active{
+                color: #fa923f;
+            }
+        }
+
+    }
+
+    &__logo{
+        margin-left: 1rem;
+
+        & a {
+            color: white;
+            text-decoration: none;
+            font-size: 2.5rem;
+        }
+
+        &__image {
+            display: inline-block;
+        }
+
+        &__text-box {
+            display: inline-block;
+            transform: translate(10%,-56%);
+            font-size: 2.5rem;
+        }
+    }
+
+
+}
+
+
+
+.spacer{
+    flex:1;
+}
+
+
+
+
+
+
+
+
