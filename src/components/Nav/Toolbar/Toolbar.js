@@ -3,6 +3,7 @@ import React from 'react'
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 import './Toolbar.scss';
 import Logo from '../../Logo/Logo'
+import {Link} from "react-router-dom";
 
 const toolbar = props => (
   <div className="toolbar">
@@ -24,10 +25,10 @@ const toolbar = props => (
       <div className="toolbar__navigation-items">
         <ul>
           <li>
-            <a href="/">SignUp</a>
+            <Link to="/login">Signup</Link>
           </li>
           <li>
-            <a href="/">LogIn</a>
+            <Link to="/login">Login</Link>
           </li>
         </ul>
       </div>

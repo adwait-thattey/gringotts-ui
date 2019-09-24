@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya:900&display=swap');
+
+.section-login-page {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 92vh;
+    border: 2px solid black;
+    position: relative;
+}
+.section-login-page-part {
+
+
+    &__heading {
+        font-family: 'Alegreya', serif;
+        margin: 2rem;
+        margin-top: 6rem;
+        font-size: 5rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1rem;
+
+        -webkit-background-clip: text;
+        color: transparent;
+
+        &--signup {
+            background-image: linear-gradient(to right, #6fa7d5, #2b1192);
+        }
+
+        &--login {
+            background-image: linear-gradient(to right, #7ed56f, #28b485);
+        }
+    }
+
+    &__signup {
+        border-right: solid black 2px;
+        background-image: linear-gradient(to right top, #7ed56f, #28b485);
+    }
+
+    &__login {
+        border-left: solid black 2px;
+        background-image: linear-gradient(to right top, #6fa7d5, #2b1192);
+
+    }
+}
+
+.section-login-page-overlay {
+
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    top: 0;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.6);
+
+    transition: all 1s;
+
+
+    &--left {
+        left: 0;
+
+
+    }
+
+    &--right {
+        right: 0;
+
+    }
+
+    &:hover {
+        background-color: rgba(0,0,0,0);
+        z-index: -2;
+    }
+}
+
+
+
+.section-login-page-rotating-vault{
+    //background-color: blue;
+    width: 30rem;
+    height: 30rem;
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+    z-index: 2;
+
+    &__vault-handle {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+.section-login-page-overlay--right:hover ~ .section-login-page-rotating-vault {
+    transition: all 2s ease-out;
+    //background-color: green;
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.section-login-page-overlay--left:hover ~ .section-login-page-rotating-vault {
+    transition: all 2s ease-out;
+    //background-color: purple;
+    transform: translate(-50%, -50%) rotate(-180deg);
+}
+
+.section-login-page-part__login:hover ~ .section-login-page-overlay--right {
+    background-color: rgba(0,0,0,0);
+    z-index: -2;
+}
+.section-login-page-part__signup:hover ~ .section-login-page-overlay--left {
+    background-color: rgba(0,0,0,0);
+    z-index: -2;
+}

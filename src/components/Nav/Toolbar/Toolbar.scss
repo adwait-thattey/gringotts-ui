@@ -4,7 +4,7 @@
     left: 0;
     width:100%;
     background: rgb(54, 51, 51);
-    height: 7rem;
+    height: 8vh;
 
     font-size: 2rem;
 
@@ -16,6 +16,10 @@
 
         &-items {
 
+            &--left {
+                margin-left: 10rem;
+                border-spacing: 1rem;
+            }
 
             & ul{
                 list-style: none;

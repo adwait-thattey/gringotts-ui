@@ -1,46 +1,31 @@
 import React from 'react';
 import Logo from './components/Logo/Logo';
+
+// import 'materialize-css/dist/css/materialize.min.css'
 import './App.scss';
 import Nav from "./components/Nav/Nav";
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Homepage from "./containers/homepage/homepage";
+import About from "./containers/about/index";
 
-function App() {
+import { BrowserRouter as Router, Route, Link, withRouter } from 'react-router-dom';
+import Login from "./containers/login/login";
+
+function App(props) {
 
 
-
+  console.log(props);
   return (
-    <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-        <hr />
-        <Route exact path="/" component={Nav} />
-        <Route path="/about" component={About} />
-      </div>
-      {/* <div>
-        <header>
-          <Nav />
-        </header>
-        <section>
-          <Logo rotate={true} size={'40rem'} />
-        </section>
-      </div> */}
-    </Router>
+      <React.Fragment>
+
+      {props.location.pathname !== "/" ? <header style={{"height":"8vh"}}> <Nav /> </header>: null}
+
+      <Route exact path="/" component={Homepage} />
+      <Route exact path="/login" component={Login} />
+      <Route path="/about" component={About} />
+
+      </React.Fragment>
+
   );
 }
 
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
-}
-
-export default App;
+export default withRouter(App);
