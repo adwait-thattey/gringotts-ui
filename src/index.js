@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Homepage from "./containers/homepage/homepage";
-import About from "./containers/about";
+import { BrowserRouter as Router } from 'react-router-dom';
 ReactDOM.render(
     <Router>
-
         <App />
     </Router>, document.getElementById('root'));
 
