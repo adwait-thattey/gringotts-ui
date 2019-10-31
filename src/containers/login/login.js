@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import M from 'materialize-css'
 import './login.scss'
 import vault_handle from '../../images/components/login/vault_handle.png';
@@ -20,16 +20,17 @@ class Login extends Component {
             <section>
                 <div className={"section-login-page"}>
 
+                    
 
                     <div className="section-login-page-part__signup">
-                        <div  className="section-login-page-part__heading section-login-page-part__heading--signup">
+                        <div className="section-login-page-part__heading section-login-page-part__heading--signup">
                             <h2>Signup</h2>
                         </div>
                     </div>
 
 
                     <div className="section-login-page-part__login">
-                        <div  className="section-login-page-part__heading section-login-page-part__heading--login">
+                        <div className="section-login-page-part__heading section-login-page-part__heading--login">
                             <h2>Login</h2>
                         </div>
                     </div>

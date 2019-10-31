@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import 'materialize-css/dist/css/materialize.min.css'
 import './App.scss';
 import Nav from "./components/Nav/Nav";
 import Homepage from "./containers/homepage/homepage";
