@@ -1,0 +1,20 @@
+.cardWrapper {
+    border-radius: 5px;
+    height: 150px;
+    display: flex;
+}
+
+.cardWrapper:hover {
+    cursor: pointer;
+}
+
+.text {
+    align-self: flex-end; 
+}
+
+.heading {
+    color: #fff;
+    font-size: 40px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+}
