@@ -33,9 +33,7 @@ const logo = (props) => {
         <div className="logo logo__container" style={style}>
             <img src={logo_back_snake} className="logo logo__back-image" alt="Razer Logo" />
             <img src={logo_inverted_vault} className="logo logo__vault-image" alt="Vault Logo" />
-
             {innerLogo()}
-
         </div>
     );
 };
