@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Icon } from 'react-materialize';
-import axios from 'axios';
 
 class Homepage extends Component {
 

@@ -10,8 +10,8 @@ import logo_inverted_vault from '../../images/components/logo/inverted-vault.png
 const logo = (props) => {
 
     const style = {
-        height : props.size? props.size: '15rem',
-        width: props.size? props.size: '15rem'
+        height : props.size? props.size: '6rem',
+        width: props.size? props.size: '6rem'
     };
 
     const innerLogo = () => {
