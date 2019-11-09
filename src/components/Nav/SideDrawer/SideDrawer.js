@@ -25,7 +25,7 @@ const sideDrawer =(props) => {
                         <li><a href='/dashboard'>Credential Manager </a> </li>  
                         <li><a href='/dashboard'>Dynamic Credentials </a> </li>  
                         <li><a href='/dashboard'>SSH Keys </a> </li>  
-                        <li><a href='/dashboard'>GPG  </a> </li>  
+                        <li><a href='/dashboard'>Secured Transfer of data (GPG)  </a> </li>  
                     </ul>
                     
                 </div>
