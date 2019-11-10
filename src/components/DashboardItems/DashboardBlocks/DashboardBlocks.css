@@ -1,0 +1,38 @@
+.blocks{
+    width: 85%;
+    height: 400px;
+    margin: 80px auto;
+    background-color:'';   
+    border: 1px grey;
+    border-radius: 10px;
+    padding: 40px 0px;
+    box-shadow: 0px 0px 20px 0px lightgrey;
+    
+}
+
+.blocks:hover{
+    box-shadow: 0px 0px 50px 0px lightgrey;
+}
+.imageDiv img{
+    height: 180px;
+    width: 180px;
+    margin: 50px auto;
+}
+
+.blocks .row{
+    width: 90%;
+}
+.blocks h2 {
+    color: #1976d2 ;
+    font-weight: bold;
+}
+
+.buttonDiv a{
+    margin: 40px auto;
+    background-color: #1976d2;
+    width: 50%;
+}
+
+.buttonDiv a:hover{
+    background-color: rgba(0, 0, 255, 0.603);
+}

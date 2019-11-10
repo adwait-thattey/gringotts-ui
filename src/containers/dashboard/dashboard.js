@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Layout from '../../hoc/Layout/Layout';
+import './dashboard.css';
 import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
-import DashboardIcons from '../../components/DashboardItems/DashboardIcons';
+import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
+import DashboardBlocks from '../../components/DashboardItems/DashboardBlocks/DashboardBlocks';
 
 class Dashboard extends Component {
     state = {
@@ -45,15 +47,28 @@ class Dashboard extends Component {
             </div>
         ));
 
+        const transformedBlocks = Object.keys(this.state.cards)
+        .map((c)=>(            
+            <DashboardBlocks 
+                image={this.state.cards[c].Image}
+                title={this.state.cards[c].Title} 
+                desc={this.state.cards[c].Desc}
+            />           
+        ));
+        
+
         return (
             <Layout>
-                <section>                                      
-                    <div className='row' style={{ width: '90%', marginBottom: '80px'}}>
-                        <div><center><h3><b>Services</b></h3></center><br/><br/></div>
-                        <div className='col l12'>
-                            {transformedCards}
-                        </div>    
-                    </div>                 
+                <section>
+                    <div className="IconsDiv">                                      
+                        <div className="row">
+                            <div><center><h3><b>Services</b></h3></center><br/><br/></div>
+                            <div className='col l12'>
+                                {transformedCards}
+                            </div>    
+                        </div>  
+                    </div>
+                    {transformedBlocks}              
                 </section>
             </Layout>   
         );
