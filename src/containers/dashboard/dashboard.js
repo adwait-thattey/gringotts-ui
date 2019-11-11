@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Layout from '../../hoc/Layout/Layout';
 import './dashboard.css';
 import credentialsImage from '../../images/components/cards/Credentials.jpeg';
@@ -7,72 +7,221 @@ import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
 import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
 import DashboardBlocks from '../../components/DashboardItems/DashboardBlocks/DashboardBlocks';
+import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
 
 class Dashboard extends Component {
     state = {
-        cards : {
-        c1: {
-            Title: "Credential Manager",
-            Image: credentialsImage,
-            Desc: "Keep all your Passwords, Keys, Tokens, Notes, Bank Accounts, Payment Cards safe and easy to find.",
+        cards: {
+            c1: {
+
+                Title: "Credential Manager",
+                Image: credentialsImage,
+                Desc: "Keep all your Passwords, Keys, Tokens, Notes, Bank Accounts, Payment Cards safe and easy to find.",
+            },
+            c2: {
+                Title: "Dynaminc Credentials",
+                Image: dynmCreds,
+                Desc: "You don't have to ever remember your credentials for ​AWS​,​ GCP​,​ Azure​ or other cloud services.",
+            },
+            c3: {
+                Title: "SSH Keys",
+                Image: sshImage,
+                Desc: "SSH-keys are used to authenticate and connect to remote servers/machines",
+            },
+            c4: {
+                Title: "Secured Transfer of data (GPG)",
+                Image: gpgImage,
+                Desc: "Making Use of GPG Keys you can easily exchange data on insecure public channels with the grigotts encrypting the data for you.",
+            }
         },
-        c2: {
-            Title: "Dynaminc Credentials",
-            Image: dynmCreds,
-            Desc: "You don't have to ever remember your credentials for ​AWS​,​ GCP​,​ Azure​ or other cloud services.",
-        },
-        c3: {
-            Title: "SSH Keys",
-            Image: sshImage,
-            Desc: "SSH-keys are used to authenticate and connect to remote servers/machines",
-        },
-        c4: {
-            Title: "Secured Transfer of data (GPG)",
-            Image: gpgImage,
-            Desc: "Making Use of GPG Keys you can easily exchange data on insecure public channels with the grigotts encrypting the data for you.",
-        }
+        categories: [
+            {
+                name: 'kv',
+                verboseName: 'Credential Manager',
+                image: credentialsImage,
+                description: "Info about credential engine"
+            },
+            {
+                name: 'aws',
+                verboseName: 'Dynamic Credentials - AWS',
+                image: dynmCreds,
+                description: "Info about AWS engine"
+            },
+            {
+                name: 'gcp',
+                verboseName: 'Dynamic Credentials - GCP',
+                image: dynmCreds,
+                description: "Info about GCP engine"
+            },
+            {
+                name: 'gpg',
+                verboseName: 'GPG Data Sharing',
+                image: gpgImage,
+                description: "Info about GPG engine"
+            },
+            {
+                name: 'ssh',
+                verboseName: 'SSH Keys',
+                image: sshImage,
+                description: "Info about SSH engine"
+            },
+
+        ],
+
+        engines: []
+
+    };
+
+    componentDidMount() {
+        this.getAllEngines();
     }
-    }
+
 
     render() {
-
         const transformedCards = Object.keys(this.state.cards)
-        .map((c)=>(
-            <div className="col s12 m6 l3">
-                <DashboardIcons 
-                    image={this.state.cards[c].Image}
-                    title={this.state.cards[c].Title} 
-                    desc={this.state.cards[c].Desc}
-                />
-            </div>
-        ));
+            .map((c, index) => (
+                <div className="col s12 m6 l3">
+                    <DashboardIcons
+                        image={this.state.cards[c].Image}
+                        title={this.state.cards[c].Title}
+                        desc={this.state.cards[c].Desc}
+                        key={index}
+                    />
+                </div>
+            ));
 
         const transformedBlocks = Object.keys(this.state.cards)
-        .map((c)=>(            
-            <DashboardBlocks 
-                image={this.state.cards[c].Image}
-                title={this.state.cards[c].Title} 
-                desc={this.state.cards[c].Desc}
-            />           
-        ));
-        
+            .map((c, index) => (
+                <DashboardBlocks
+                    image={this.state.cards[c].Image}
+                    title={this.state.cards[c].Title}
+                    desc={this.state.cards[c].Desc}
+                    key={index}
+                />
+            ));
+
+        const categoryCards = this.state.categories.map(cat => {
+            // cat = cat.toLowerCase();
+            let filteredEngines = this.state.engines.filter(eng => eng.type === cat.name)
+
+            if (filteredEngines.length > 0) {
+                return <DashboardCategoryCard
+                    engines={filteredEngines}
+                    title={cat.verboseName}
+                    key={cat.name}
+                    category={cat}
+                />
+            }
+            return "";
+        })
 
         return (
             <Layout>
                 <section>
-                    <div className="IconsDiv">                                      
+                    <div className="IconsDiv">
                         <div className="row">
-                            <div><center><h3><b>Services</b></h3></center><br/><br/></div>
+                            <div>
+                                <center><h3><b>Services</b></h3></center>
+                                <br/><br/></div>
                             <div className='col l12'>
                                 {transformedCards}
-                            </div>    
-                        </div>  
+                            </div>
+                        </div>
                     </div>
-                    {transformedBlocks}              
+                    {categoryCards}
                 </section>
-            </Layout>   
+            </Layout>
         );
     }
+
+    getAllEngines = () => {
+        // make an API call to get all engines
+        let obtainedEngines = [
+            {
+                id: "1",
+                name: "KV Eng 1",
+                type: "kv",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 25
+            },
+            {
+                id: "2",
+                name: "KV Eng 2",
+                type: "kv",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 9
+            },
+            {
+                id: "3",
+                name: "KV Eng 3",
+                type: "kv",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 56
+            },
+            {
+                id: "4",
+                name: "KV Eng 4",
+                type: "kv",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: "Multiple Errors",
+                credCount: 13
+            },
+            {
+                id: "5",
+                name: "AWS engine 1",
+                type: "aws",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 9
+            },
+            {
+                id: "6",
+                name: "AWS Engine 2",
+                type: "aws",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 8
+            },
+            {
+                id: "7",
+                name: "GPG Engine 1",
+                type: "gpg",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 4
+            },
+            {
+                id: "8",
+                name: "SSH Engine 1",
+                type: "ssh",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 36
+            },
+            {
+                id: "9",
+                name: "SSH Engine 2",
+                type: "ssh",
+                ownedBy: "Sample User",
+                createdOn: "some date",
+                health: true,
+                credCount: 45
+            },
+
+        ];
+        this.setState({engines: obtainedEngines});
+    };
 }
 
 export default Dashboard;
