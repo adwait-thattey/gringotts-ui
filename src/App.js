@@ -13,7 +13,7 @@ function App(props) {
         <Route exact path="/" component={Homepage} />
         <Route exact path="/login" component={Login} />
         <Route path="/about" component={About} />
-        <Route path="/dashboard" component={Dashboard}/>
+        <Route path="/dashboard" component={Dashboard}/>*}
       </React.Fragment>
   );
 }

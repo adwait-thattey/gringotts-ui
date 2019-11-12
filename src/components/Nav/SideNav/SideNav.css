@@ -1,0 +1,12 @@
+.SideNav {
+    top: 70px;
+    left: 5px;
+    border: 1px solid black;
+    width: 200px;
+    max-width: 70%;
+    padding: 16x 10px;
+    background-color: rgb(205, 219, 228);
+    height: 450px;   
+    position: fixed;
+    z-index:100;
+}
