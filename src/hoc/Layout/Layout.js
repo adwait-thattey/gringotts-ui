@@ -3,6 +3,7 @@ import Aux from '../Aux/Aux';
 import Toolbar from '../../components/Nav/Toolbar/Toolbar';
 import Footer from '../../components/Footer/Footer';
 import SideDawer from '../../components/Nav/SideDrawer/SideDrawer';
+import DrawerToggle from '../../components/Nav/SideDrawer/DrawerToggle/DrawerToggle';
 
 class layout extends Component {
     state ={
@@ -24,7 +25,7 @@ class layout extends Component {
     render(){
         return (
             <Aux>   
-                <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler}/>
+                <Toolbar  toggleButton={<DrawerToggle clicked={this.sideDrawerToggleHandler}/>} />
                 <SideDawer 
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler}

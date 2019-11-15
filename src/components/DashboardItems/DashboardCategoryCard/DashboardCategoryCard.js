@@ -27,7 +27,7 @@ class DashboardCategoryCard extends React.Component {
     }
     render() {
         let transformedEngineInfo = (eng) => {
-            return <table className="responsive-table striped">
+            return <table className="responsive-table dark">
                 <tbody>
                 <tr>
                     <th>Type:</th>

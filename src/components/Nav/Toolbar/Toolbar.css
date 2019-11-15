@@ -4,3 +4,23 @@
     font-weight: bolder;
     font-family: 'Raleway', sans-serif;
 }
+
+.right ul li a{
+    font-size: 1.8rem;
+}
+
+.right ul li{
+    margin: 0px 10px auto;
+}
+
+.header {
+    height: 65px;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+    margin-bottom: 5px; 
+}
+.header nav{
+    position: fixed;
+    height: 65px;
+}

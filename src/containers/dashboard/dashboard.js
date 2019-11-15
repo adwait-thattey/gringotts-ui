@@ -1,11 +1,13 @@
-import React, {Component} from 'react';
-import Layout from '../../hoc/Layout/Layout';
-import './dashboard.css';
+import React, { Component } from 'react';
+
 import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
 import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
+import Layout from '../../hoc/Layout/Layout';
+import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
+import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
 
 class Dashboard extends Component {
@@ -75,7 +77,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const transformedCards = Object.keys(this.state.cards)
+        const transformedIcons = Object.keys(this.state.cards)
             .map((c, index) => (
                 <div className="col s12 m6 l3">
                     <DashboardIcons
@@ -83,7 +85,7 @@ class Dashboard extends Component {
                         title={this.state.cards[c].Title}
                         desc={this.state.cards[c].Desc}
                         key={index}
-                    />
+                    />  
                 </div>
             ));
 
@@ -105,16 +107,7 @@ class Dashboard extends Component {
         return (
             <Layout>
                 <section>
-                    <div className="IconsDiv">
-                        <div className="row">
-                            <div>
-                                <center><h3><b>Services</b></h3></center>
-                                <br/><br/></div>
-                            <div className='col l12'>
-                                {transformedCards}
-                            </div>
-                        </div>
-                    </div>
+                    <IconsBlock> {transformedIcons} </IconsBlock>
                     {categoryCards}
                 </section>
             </Layout>
@@ -212,3 +205,5 @@ class Dashboard extends Component {
 }
 
 export default Dashboard;
+
+
