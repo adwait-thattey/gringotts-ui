@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import Layout from '../../hoc/Layout/Layout';
-import './homepage.css';
+
 import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
-import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
+
+import Layout from '../../hoc/Layout/Layout';
+import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
+import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardBlocks from '../../components/DashboardItems/DashboardBlocks/DashboardBlocks';
 
 class Homepage extends Component {
@@ -36,7 +38,7 @@ class Homepage extends Component {
 
     render() {
 
-        const transformedCards = Object.keys(this.state.cards)
+        const transformedIcons = Object.keys(this.state.cards)
         .map((c)=>(
             <div className="col s12 m6 l3">
                 <DashboardIcons 
@@ -60,14 +62,7 @@ class Homepage extends Component {
         return (
             <Layout>
                 <section>
-                    <div className="IconsDiv">                                      
-                        <div className="row">
-                            <div><center><h3><b>Services</b></h3></center><br/><br/></div>
-                            <div className='col l12'>
-                                {transformedCards}
-                            </div>    
-                        </div>  
-                    </div>
+                    <IconsBlock> {transformedIcons} </IconsBlock>
                     {transformedBlocks}              
                 </section>
             </Layout>   

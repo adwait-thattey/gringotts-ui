@@ -18,7 +18,7 @@ const dashboardIcons = (props) => (
                 </div>
             </div>
             <div className="flip-box-back">
-                <h4><a href="/dashboard">{props.title}</a></h4>
+                <h4><b><a href="/dashboard">{props.title}</a></b></h4>
                 <h5>{props.desc}</h5>
             </div>
         </div>
