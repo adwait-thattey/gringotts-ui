@@ -6,14 +6,12 @@ import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
 import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
-import DashboardBlocks from '../../components/DashboardItems/DashboardBlocks/DashboardBlocks';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
 
 class Dashboard extends Component {
     state = {
         cards: {
             c1: {
-
                 Title: "Credential Manager",
                 Image: credentialsImage,
                 Desc: "Keep all your Passwords, Keys, Tokens, Notes, Bank Accounts, Payment Cards safe and easy to find.",
@@ -76,7 +74,6 @@ class Dashboard extends Component {
         this.getAllEngines();
     }
 
-
     render() {
         const transformedCards = Object.keys(this.state.cards)
             .map((c, index) => (
@@ -88,16 +85,6 @@ class Dashboard extends Component {
                         key={index}
                     />
                 </div>
-            ));
-
-        const transformedBlocks = Object.keys(this.state.cards)
-            .map((c, index) => (
-                <DashboardBlocks
-                    image={this.state.cards[c].Image}
-                    title={this.state.cards[c].Title}
-                    desc={this.state.cards[c].Desc}
-                    key={index}
-                />
             ));
 
         const categoryCards = this.state.categories.map(cat => {

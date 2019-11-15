@@ -15,13 +15,13 @@ class DashboardCategoryCard extends React.Component {
 
     getEngineHealth = (health) => {
         if (health === true) {
-            return <span style={{color:"green"}}>
-                     <i className="material-icons" style={{fontWeight:"bold",paddingRight:"2px",fontSize:"140%"}}>check</i> Good
+            return <span style={{color:"green", display: 'flex', alignItems: 'center'}}>
+                <i className="material-icons" style={{fontWeight:"bold",paddingRight:"2px",fontSize:"140%"}}>check</i> Good
             </span>
         }
         else {
             return <span style={{color:"red"}} >
-                     <i className="material-icons" style={{fontWeight:"bold",paddingRight:"2px",fontSize:"140%"}}>clear</i> <span > {health}</span>
+                <i className="material-icons" style={{fontWeight:"bold",paddingRight:"2px",fontSize:"140%"}}>clear</i> <span > {health}</span>
             </span>
         }
     }
@@ -46,9 +46,8 @@ class DashboardCategoryCard extends React.Component {
                 <tr>
                     <th > Health:</th>
                     <td colSpan="2"> {this.getEngineHealth(eng.health)}</td>
-
                     <span style={{color:"blue"}}>
-                    <TableCell content="Go to Engine"/>
+                        <TableCell content="Go to Engine"/>
                     </span>
                     {/*<th colSpan="2" style={{color:"green",fontWeight:"bold",cursor:"pointer", textDecoration:"underline"}}> <a style={{textDecoration:"none"}} href="#">Go to Engine &gt;</a> </th>*/}
                 </tr>
