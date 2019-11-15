@@ -1,0 +1,21 @@
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalData {
+    width: 40%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+
+    background: #fff;
+}

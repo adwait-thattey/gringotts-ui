@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 import classes from './style.module.css';
 import Card from '../../components/DashboardItems/Card/index';
+import Modal from '../../components/Modal/index';
 
 class Engine extends Component {
     state = {
-        categories: null
+        categories: null,
+        isShowing: true
     }
 
     getCategories = () => {
@@ -29,20 +31,30 @@ class Engine extends Component {
         ]
     }
 
+    getCreds = () => {
+
+    }
+
+    closeModal = () => {
+        this.setState({ isShowing: false });
+    }
+
     componentDidMount () {
         this.setState({ categories: this.getCategories() })
     }
 
     render() {
-        const { categories } = this.state;
+        const { categories, isShowing } = this.state;
 
         return (
-            <Row>
-                <div className={classes.wrapper}>
+            <Row onClick={this.closeModal}>
+                {isShowing && <Modal 
+                    isLoading={true}
+                />}
+                <div className={`${classes.wrapper} ${isShowing && classes.hide}`}>
                     <Col l={3}>
                         <aside>
                             <section className={classes.leftside}>
-                                <h1>HI</h1>
                             </section>
                         </aside>
                     </Col>
