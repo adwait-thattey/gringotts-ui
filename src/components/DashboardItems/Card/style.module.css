@@ -1,24 +1,59 @@
 .card {
-    padding: 1rem;
+    padding: 1rem 2rem;
+    padding-bottom: 2rem;
     box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid hsl(210, 73%, 55%);
+    margin-bottom: 1rem;
 }
 
 h3 {
     font-weight: 500;
+    padding-bottom: 1rem;
+}
+
+ul * {
+    font-size: 2rem;
+    padding: 0 2rem;
 }
 
 ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    height: 25rem;
+    overflow: auto;
 }
   
 li {
-    padding-left: 1em; 
-    text-indent: -.7em;
+    text-indent: -.7px;
+    font-weight: 600;
+    padding: 12px 10px;
 }
-  
+
 li::before {
     content: "• ";
-    color: red; /* or whatever color you prefer */
+    font-size: 20px;
+    color: blue; /* or whatever color you prefer */
+}
+
+li:hover {
+    background: #ECF5FC;
+    cursor: pointer;
+}
+
+li span {
+    position: relative;
+    left: 40px;
+}
+
+.faintText {
+    color: #D3D3D3;
+    font-weight: 600;
+    font-size: 2rem;
 }
