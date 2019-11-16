@@ -47,7 +47,7 @@ class DashboardCategoryCard extends React.Component {
 
                 <tr>
                     <span style={{color:"blue"}}>
-                        <NavLink to={`${this.props.match.url}/kv/${eng.name}`} >
+                        <NavLink to={`${this.props.match.url}/${eng.type}/${eng.name}`} >
                             <TableCell content="Go to Engine"/>
                         </NavLink>
                     </span>
