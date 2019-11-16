@@ -29,8 +29,8 @@ const toolbar = (props) => (
                         </div>
                     </li>
 					<ul className="right hide-on-med-and-down">
-						<li ><a href="/"><b>Sign Up</b></a></li>
-						<li><a href="/"><b>Log In</b></a></li>
+						{/* <li ><a href="/"><b>Sign Up</b></a></li> */}
+						<li><a href="/"><b>Sign Out</b></a></li>
                         <li></li>
 					</ul>     
                 </ul>

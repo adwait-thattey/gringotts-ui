@@ -30,7 +30,7 @@ class Dashboard extends Component {
             c4: {
                 Title: "Secured Transfer of data (GPG)",
                 Image: gpgImage,
-                Desc: "Making Use of GPG Keys you can easily exchange data on insecure public channels with the grigotts encrypting the data for you.",
+                Desc: "Making Use of GPG Keys you can easily exchange data on insecure public channels with the gringotts encrypting the data for you.",
             }
         },
         categories: [

@@ -1,0 +1,49 @@
+.contDiv{
+   width: 620px;
+   background-color:'';
+   margin: auto; margin-top: 30px;
+   margin-bottom: 50px; 
+   position: relative;
+   display: flex;
+   flex-flow: column;
+   align-items: center;
+}
+
+.contDiv .register{
+    width: 620px;
+}
+
+.contDiv .login{
+    width: 620px;
+}
+
+.contDiv .row{
+    width: 70%;
+}
+
+.tabs{
+    background-color: #1976d2;  
+    width: 100%;
+    border-radius: 20px;
+}
+.tabs .tab {
+    background-color: #1976d2;
+}
+.tabs .tab a{
+    background-color: #1976d2;
+    color:white;
+}
+.tabs .tab a:hover {
+    background-color: #1976d2;
+    color:white;
+} 
+.tabs .tab a.active {
+    background-color:  #1976d2;
+    color:white;
+} 
+.tabs .indicator {
+    background-color: blue ;
+} 
+
+
+

@@ -8,9 +8,9 @@ const Card = ({ categoryName, credList }) => {
                 <h3>{categoryName}</h3>
                 <h4 className={classes.faintText}>Credentials List</h4>
             </div>
-            <ul>
+            <ul className={classes.credListUl}>
                 {credList.map((cred, index) => (
-                    <li key={index} className={`colorObj${index % 3}`}>
+                    <li key={index} className={`${classes.credListli} colorObj${index % 3}`}>
                         <span>{cred}</span>
                     </li>
                 ))}

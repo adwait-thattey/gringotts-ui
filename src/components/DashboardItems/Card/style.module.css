@@ -17,12 +17,12 @@ h3 {
     padding-bottom: 1rem;
 }
 
-ul * {
+.credListUl * {
     font-size: 2rem;
     padding: 0 2rem;
 }
 
-ul {
+.credListUl {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -30,24 +30,24 @@ ul {
     overflow: auto;
 }
   
-li {
+.credListli {
     text-indent: -.7px;
     font-weight: 600;
     padding: 12px 10px;
 }
 
-li::before {
+.credListli::before {
     content: "• ";
     font-size: 20px;
     color: blue; /* or whatever color you prefer */
 }
 
-li:hover {
+.credListli:hover {
     background: #ECF5FC;
     cursor: pointer;
 }
 
-li span {
+.credListli span {
     position: relative;
     left: 40px;
 }
