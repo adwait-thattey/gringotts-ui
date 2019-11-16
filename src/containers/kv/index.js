@@ -7,7 +7,13 @@ import Modal from '../../components/Modal/index';
 class Engine extends Component {
     state = {
         categories: null,
-        isShowing: true
+        isShowing: true,
+        info: {
+            credNameLabel: null,
+            credName: null,
+            credValueLabel: null,
+            credValue: null
+        }
     }
 
     getCategories = () => {
@@ -44,12 +50,16 @@ class Engine extends Component {
     }
 
     render() {
-        const { categories, isShowing } = this.state;
+        const { categories, isShowing, info } = this.state;
 
         return (
             <Row onClick={this.closeModal}>
                 {isShowing && <Modal 
-                    isLoading={true}
+                    isLoading={false}
+                    credNameLabel={info.credNameLabel}
+                    credName={info.credName}
+                    credNameLabel={info.credNameLabel}
+                    credNameLabel={info.credNameLabel}
                 />}
                 <div className={`${classes.wrapper} ${isShowing && classes.hide}`}>
                     <Col l={3}>
