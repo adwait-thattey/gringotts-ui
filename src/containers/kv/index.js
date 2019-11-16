@@ -5,7 +5,6 @@ import Tree from '../../components/TreeView/tree';
 import CredCard from "../../components/KV/CredCard/CredCard";
 import M from 'materialize-css';
 import API from '../../utils/axios';
-import axios from 'axios';
 
 class Engine extends Component {
     state = {
@@ -17,50 +16,6 @@ class Engine extends Component {
     };
 
 
-    getCategories = () => {
-        return [
-            {
-                categoryName: "email",
-                creds: [
-                    {"provider": "GMail", "key": "x@gmail.com", "_id": "2432523"},
-                    {"provider": "GMail", "key": "y@gmail.com", "_id": "24dw2523"},
-                    {"provider": "Outlook", "key": "x@outlook.com", "_id": "243eqw523"},
-                    {"provider": "Outlook", "key": "y@outlook.com", "_id": "2432ewaw"},
-                    {"provider": "GMail", "key": "x@gmail.com", "_id": "24325aewad"}
-                ]
-            },
-            {
-                categoryName: "entertainment",
-                creds: [
-                    {"provider": "Netflix", "key": "sampleuser001", "_id": "2432aed"},
-                    {"provider": "DC Prime", "key": "sampleuser002", "_id": "24dw252ed"},
-                    {"provider": "Netflix", "key": "sampleuser003", "_id": "243eqw52aa"},
-                    {"provider": "Amazon Prime", "key": "sampleuser004", "_id": "2432aewfdae"},
-                    {"provider": "HotStar", "key": "sampleuser005", "_id": "24325wededd"}
-                ]
-            },
-            {
-                categoryName: "social",
-                creds: [
-                    {"provider": "Twitter", "key": "x@gmail.com", "_id": "24325dfs"},
-                    {"provider": "DevRant", "key": "y@gmail.com", "_id": "24dw2asds"},
-                    {"provider": "Twitter", "key": "x@outlook.com", "_id": "243eqwasd"},
-                    {"provider": "Reddit", "key": "x@gmail.com", "_id": "24325aewasd"}
-                ]
-            },
-            {
-                categoryName: "other",
-                creds: [
-                    {"provider": "acm.dl", "key": "x@gmail.com", "_id": "2432sdas"},
-                    {"provider": "acm.dl", "key": "y@gmail.com", "_id": "24dw2asdas"},
-                    {"provider": "acm.dl", "key": "x@outlook.com", "_id": "243easda"},
-                    {"provider": "outlook", "key": "y@outlook.com", "_id": "2432ewaw"},
-                    {"provider": "gmail", "key": "x@gmail.com", "_id": "24325aewad"}
-                ]
-            }
-        ]
-    }
-
     createCredential = category => {
         console.log("create new cred sequence called for ", category)
         console.log(this.state.createCredModalInstance)
@@ -68,6 +23,21 @@ class Engine extends Component {
         this.setState({selectedCategoryForAdding: category});
         this.state.createCredModalInstance.open()
     };
+
+    getUpdatedObj = (obj) => {
+        const updatedCategory = obj.categories.map(category => {
+            return {
+                categoryName: category.name,
+                creds: category.creds.map(cred => {
+                    return {
+                        provider: cred.providerName,
+                        key: cred.credName
+                    }
+                })
+            }
+        })
+        return updatedCategory;
+    }
 
     async componentDidMount() {
         var elems = document.querySelectorAll('.modal');
@@ -83,6 +53,17 @@ class Engine extends Component {
         let createCredModal = document.getElementById('createCredModal');
         createCredModal = M.Modal.init(createCredModal, modalOptions);
         this.setState({createCredModalInstance: createCredModal});
+
+        const locationSplitBySlash = this.props.location.pathname.split('/');
+        const engineName = locationSplitBySlash[locationSplitBySlash.length - 1];
+    
+        try {
+            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5Mzc3NzAsImV4cCI6MTU3Mzk0MTM3MH0.8Goq8zVj42EvTVdK20nQK9riKbZx3qnGaZOkjLepZZU" } })
+            const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
+            this.setState({ categories: updateObj })
+        } catch(e) {
+            console.log(e);
+        }
 
     }
 
@@ -153,7 +134,6 @@ class Engine extends Component {
         const credCards = categories.map(cat => {
             return <CredCard category={cat} key={cat.categoryName} credClicked={this.credClicked}
                              createCred={this.createCredential}/>
-            // return <CredCard />
         });
         return (
             <React.Fragment>
@@ -184,7 +164,7 @@ class Engine extends Component {
                                     ))}
                                 </Row>*/}
                                 <div className="row">
-                                    {credCards.map(cc => <div className="col s12 m6">{cc}</div>)}
+                                    {credCards.map((cc, index) => <div key={index} className="col s12 m6">{cc}</div>)}
                                 </div>
                             </section>
                         </div>
