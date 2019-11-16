@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.32",
     "axios": "^0.19.0",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.9.0",
@@ -10,7 +13,8 @@
     "react-materialize": "^3.4.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1"
+    "react-scripts": "3.1.1",
+    "sticky-sidebar": "^3.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

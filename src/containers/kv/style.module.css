@@ -1,0 +1,20 @@
+.leftside {
+    border-right: 2px solid gray;
+    height: 95vh;
+    overflow: auto;
+    padding: 2rem 2rem;
+}
+
+.wrapper {
+    height: 95vh;
+}
+
+.rightside {
+    height: 95vh;
+    overflow: auto;
+    padding: 2rem 4rem;
+}
+
+.cardWrapper {
+    margin: 2rem;
+}

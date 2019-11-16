@@ -36,3 +36,8 @@
   transform: rotateY(180deg);
   font-size: 1.2rem;
 }
+
+.flip-box-back a{
+  font-family: 'Raleway', sans-serif;
+  color: #1976d2;
+}
