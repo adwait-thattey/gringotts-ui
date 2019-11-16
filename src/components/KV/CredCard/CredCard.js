@@ -19,7 +19,7 @@ class CredCard extends React.Component {
                         <div className="divider cred-card-divider" />
                         <div className="card-content ">
                             <div className="cred-card__content">
-                                <CredTable creds={this.props.category.creds} cat={this.props.category.categoryName} credClicked={this.props.credClicked} />
+                                <CredTable creds={this.props.category.creds} cat={this.props.category.categoryName} credClicked={this.props.credClicked} createCred={this.props.createCred} />
                             </div>
                         </div>
                     </div>

@@ -74,6 +74,12 @@ a, u {
         font-style: italic;
         color : #c31900;
     }
+
+    &__create {
+        color: #0b17b7;
+        text-decoration: underline;
+        background-color: #ebebeb;
+    }
 }
 .page-title {
     font-family: 'Poppins', sans-serif;
@@ -113,4 +119,34 @@ a, u {
 
 .reveal-icon {
     font-size: 3rem;
+}
+
+.create-cred-modal {
+    height: 40vh;
+    font-size: 2rem;
+    font-family: 'Poppins', sans-serif;
+
+    &__content {
+
+        &_heading {
+            font-weight: bold;
+            font-style: italic;
+            font-size: 2.5rem;
+        }
+
+        &_secret-container {
+            margin-top: 3vh;
+            font-weight: bold;
+            margin-bottom: 2vh;
+        }
+
+        &_secret {
+            font-style: italic;
+        }
+    }
+
+    &__footer {
+        height: 10vh;
+        bottom: 5vh;
+    }
 }

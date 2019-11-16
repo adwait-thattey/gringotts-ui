@@ -17,6 +17,11 @@ class CredTable extends React.Component {
         const credRows = transformedCells.map(cell => <tr>{cell}</tr>);
         return <table className="responsive-table striped category-table">
             <tbody>
+            <td className="cred-cell cred-cell__create" >
+                <a href="javascript:void(0)" className="" onClick={() => this.props.createCred(this.props.cat)}>
+                    <span className="cred-cell__key">Add Credential &nbsp;&nbsp;&gt;</span>
+                </a>
+            </td>
             {credRows}
             </tbody>
         </table>

@@ -9,8 +9,10 @@ import M from 'materialize-css';
 class Engine extends Component {
     state = {
         categories: [],
-        modalInstance: null,
-        selectedCred: null
+        revealCredModalInstance: null,
+        createCredModalInstance: null,
+        selectedCred: null,
+        selectedCategoryForAdding: null
     };
 
 
@@ -58,73 +60,103 @@ class Engine extends Component {
         ]
     }
 
+    createCredential = category => {
+        console.log("create new cred sequence called for ", category)
+        console.log(this.state.createCredModalInstance)
+
+        this.setState({selectedCategoryForAdding: category});
+        this.state.createCredModalInstance.open()
+    };
+
     componentDidMount() {
         this.setState({categories: this.getCategories()});
 
         var elems = document.querySelectorAll('.modal');
-        var instances = M.Modal.init(elems, {
+        /*        var instances = M.Modal.init(elems, {
+                    inDuration: 300,
+                    outDuration: 500
+                });*/
+        let modalOptions = {
             inDuration: 300,
             outDuration: 500
-        });
-        this.setState({modalInstance: instances});
+        };
+        let revealCredModal = document.getElementById('credModal');
+        revealCredModal = M.Modal.init(revealCredModal, modalOptions);
+        this.setState({revealCredModalInstance: revealCredModal});
+
+        let createCredModal = document.getElementById('createCredModal');
+        createCredModal = M.Modal.init(createCredModal, modalOptions);
+        this.setState({createCredModalInstance: createCredModal});
 
     }
 
     retrieveSecret = cred => {
-      // get secret
-      return "supersecret005"
+        // get secret
+        return "supersecret005"
     };
 
     secretRevealClicked = () => {
         const cred = this.state.selectedCred;
-        this.setState({selectedCred:{
+        this.setState({
+            selectedCred: {
                 provider: cred.provider,
                 key: cred.key,
                 "_id": cred["_id"],
                 secret: this.retrieveSecret(cred)
-            }})
+            }
+        })
     };
 
     secretCopyCLicked = () => {
         const cred = this.state.selectedCred;
         const secret = this.retrieveSecret(cred);
         const curComponent = this;
-        navigator.clipboard.writeText(secret).then(function() {
+        navigator.clipboard.writeText(secret).then(function () {
             console.log('Async: Copying to clipboard was successful!');
-            curComponent.setState({selectedCred:{
+            curComponent.setState({
+                selectedCred: {
                     provider: cred.provider,
                     key: cred.key,
                     "_id": cred["_id"],
                     secret: "copied to clipboard"
-                }})
-        }, function(err) {
+                }
+            })
+        }, function (err) {
             console.error('Async: Could not copy text: ', err);
         });
     };
 
     credClicked = cred => {
-        console.log(this.state.modalInstance);
+        console.log(this.state);
+        console.log(this.state.revealCredModalInstance);
 
-        this.setState({selectedCred:{...cred, secret:"*******"}});
+        this.setState({selectedCred: {...cred, secret: "*******"}});
 
-        this.state.modalInstance[0].open();
+        this.state.revealCredModalInstance.open();
         console.log("Cred clicked", this.state.selectedCred);
 
     };
 
+    addNewCredential = () => {
+      const newCredKey = document.getElementById('new-cred-key-input').value;
+      const newCredValue = document.getElementById('new-cred-secret-input').value;
+
+      console.log(newCredKey, newCredValue);
+    };
     render() {
         let {selectedCred} = this.state;
-        if(!selectedCred){
+        if (!selectedCred) {
             selectedCred = {
                 key: "No Credential Selected",
                 provider: "Not selected",
-                "_id=":"none",
-                secret:"*******"
+                "_id=": "none",
+                secret: "*******"
             }
         }
         const {categories} = this.state;
         const credCards = categories.map(cat => {
-            return <CredCard category={cat} key={cat.categoryName} credClicked={this.credClicked}/>
+            return <CredCard category={cat} key={cat.categoryName} credClicked={this.credClicked}
+                             createCred={this.createCredential}/>
             // return <CredCard />
         });
         return (
@@ -162,25 +194,61 @@ class Engine extends Component {
                         </div>
                     </div>
                 </Row>
-                <div id="credModel" className="modal bottom-sheet secret-modal">
+                <div id="credModal" className="modal bottom-sheet secret-modal">
                     <div className="modal-content secret-model__content">
                         <div className="secret-modal__content_heading">
                             <span className="cred-cell__key">{selectedCred.key}</span>
                             <span className="cred-cell__provider">( {selectedCred.provider})</span>
                         </div>
                         <div className="secret-modal__content_secret-container">
-                                <span>Secret : </span> <span className="secret-modal__content_secret">{selectedCred.secret}</span>
+                            <span>Secret : </span> <span
+                            className="secret-modal__content_secret">{selectedCred.secret}</span>
                         </div>
                         <div>
-                            <div className="btn waves-effect cyan darken-4" onClick={this.secretRevealClicked}> <i className="material-icons reveal-icon">remove_red_eye</i> &nbsp;&nbsp;Reveal</div> &nbsp;&nbsp;
-                            <div className="btn waves-effect cyan darken-4" onClick={this.secretCopyCLicked}> <i className="material-icons reveal-icon">filter_none</i> &nbsp;&nbsp;Copy</div>
+                            <div className="btn waves-effect cyan darken-4" onClick={this.secretRevealClicked}><i
+                                className="material-icons reveal-icon">remove_red_eye</i> &nbsp;&nbsp;Reveal
+                            </div>
+                            &nbsp;&nbsp;
+                            <div className="btn waves-effect cyan darken-4" onClick={this.secretCopyCLicked}><i
+                                className="material-icons reveal-icon">filter_none</i> &nbsp;&nbsp;Copy
+                            </div>
 
                         </div>
                     </div>
 
-                    <div className="divider cred-card-divider" />
-                    <div className="modal-footer secret-modal__footer">
+                    <div className="divider cred-card-divider"/>
+                    <div className="modal-footer secret-modal__footer">`
                         <a href="#!" className="modal-close waves-effect waves-red btn red darken-4">Close</a>
+                    </div>
+                </div>
+
+                <div id="createCredModal" className="modal bottom-sheet create-cred-modal">
+                    <div className="modal-content create-cred-model__content">
+                        <div className="create-cred-modal__content_heading">
+                            <span className="cred-cell__key">Create new Credential</span>
+                            <span className="cred-cell__provider">( {this.state.selectedCategoryForAdding})</span>
+                        </div>
+                        <div className="create-cred-modal__content_secret-container">
+                            <div className="row">
+                                <div className="input-field col s12">
+                                    <input id="new-cred-key-input" type="text" className="validate"/>
+                                    <label htmlFor="new-cred-key-input">Key</label>
+                                </div>
+
+                                <div className="input-field col s12">
+                                    <input id="new-cred-secret-input" type="password" className="validate" />
+                                        <label htmlFor="new-cred-secret-input">Secret</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="divider cred-card-divider"/>
+                    <div className="modal-footer create-cred-modal__footer">
+                        <a href="#!" className="waves-effect waves-yellow btn yellow darken-4" onClick={ () => M.updateTextFields()}>Reset</a>&nbsp;
+                        <a href="#!" className="modal-close waves-effect waves-green btn green darken-4" onClick={this.addNewCredential}>Submit</a>&nbsp;
+                        <a href="#!" className="modal-close waves-effect waves-red btn red darken-4">Cancel</a>&nbsp;
                     </div>
                 </div>
 
