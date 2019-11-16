@@ -17,9 +17,6 @@ class Engine extends Component {
 
 
     createCredential = category => {
-        console.log("create new cred sequence called for ", category)
-        console.log(this.state.createCredModalInstance)
-
         this.setState({selectedCategoryForAdding: category});
         this.state.createCredModalInstance.open()
     };
@@ -39,9 +36,12 @@ class Engine extends Component {
         return updatedCategory;
     }
 
+    getEngineNameFromUrl = (url) => {
+        const locationSplitBySlash = url.split('/');
+        return locationSplitBySlash[locationSplitBySlash.length - 1];
+    }
+
     async componentDidMount() {
-        var elems = document.querySelectorAll('.modal');
-        
         let modalOptions = {
             inDuration: 300,
             outDuration: 500
@@ -54,8 +54,7 @@ class Engine extends Component {
         createCredModal = M.Modal.init(createCredModal, modalOptions);
         this.setState({createCredModalInstance: createCredModal});
 
-        const locationSplitBySlash = this.props.location.pathname.split('/');
-        const engineName = locationSplitBySlash[locationSplitBySlash.length - 1];
+        const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
     
         try {
             const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5Mzc3NzAsImV4cCI6MTU3Mzk0MTM3MH0.8Goq8zVj42EvTVdK20nQK9riKbZx3qnGaZOkjLepZZU" } })
@@ -68,7 +67,6 @@ class Engine extends Component {
     }
 
     retrieveSecret = cred => {
-        // get secret
         return "supersecret005"
     };
 
@@ -89,7 +87,6 @@ class Engine extends Component {
         const secret = this.retrieveSecret(cred);
         const curComponent = this;
         navigator.clipboard.writeText(secret).then(function () {
-            console.log('Async: Copying to clipboard was successful!');
             curComponent.setState({
                 selectedCred: {
                     provider: cred.provider,
@@ -104,23 +101,24 @@ class Engine extends Component {
     };
 
     credClicked = cred => {
-        console.log(this.state);
-        console.log(this.state.revealCredModalInstance);
-
         this.setState({selectedCred: {...cred, secret: "*******"}});
 
         this.state.revealCredModalInstance.open();
-        console.log("Cred clicked", this.state.selectedCred);
-
     };
 
     addNewCredential = () => {
-      const newCredKey = document.getElementById('new-cred-key-input').value;
-      const newCredValue = document.getElementById('new-cred-secret-input').value;
+        const newCredKey = document.getElementById('new-cred-key-input').value;
+        const newCredValue = document.getElementById('new-cred-secret-input').value;
+    
+        // const res = await API.post(`/api/creds/secret/${this.getEngineNameFromUrl(this.props.location.pathname)}/kv/${this.state.selectedCategoryForAdding}`, {
 
-      console.log(newCredKey, newCredValue);
+        // })
+
     };
+
     render() {
+        this.props.location.pathname.split('/');
+
         let {selectedCred} = this.state;
         if (!selectedCred) {
             selectedCred = {
@@ -150,19 +148,10 @@ class Engine extends Component {
                         </Col>
                         <div className="col l9 s12">
                             <section className={classes.rightside}>
-                                <h1 className="cyan-text text-darken-4 title page-title">Credentials</h1>
-                                {/*<Row className={classes.customRow}>
-                                    {categories && categories.map((category, index) => (
-                                        <Col l={6} key={index}>
-                                            <div className={classes.cardWrapper}>
-                                                <Card
-                                                    categoryName={category.categoryName}
-                                                    credList={category.creds}
-                                                />
-                                            </div>
-                                        </Col>
-                                    ))}
-                                </Row>*/}
+                                <div className={classes.headingArea}>
+                                    <h1 className="cyan-text text-darken-4 title page-title">Credentials</h1>
+                                    <button className={classes.categoryBtn}>Add Category</button>
+                                </div>
                                 <div className="row">
                                     {credCards.map((cc, index) => <div key={index} className="col s12 m6">{cc}</div>)}
                                 </div>
@@ -213,7 +202,7 @@ class Engine extends Component {
 
                                 <div className="input-field col s12">
                                     <input id="new-cred-secret-input" type="password" className="validate" />
-                                        <label htmlFor="new-cred-secret-input">Secret</label>
+                                    <label htmlFor="new-cred-secret-input">Secret</label>
                                 </div>
                             </div>
                         </div>

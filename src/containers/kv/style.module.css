@@ -23,3 +23,27 @@
     background: rgba(0, 0, 0, 0.4);
     filter: blur(4px)
 }
+
+.headingArea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.categoryBtn {
+    padding: 1rem 4rem;
+    font-size: 20px;
+    border-radius: 20px;
+    outline: none;
+    border: 0;
+    background: #a794ec;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 5px 10px 10px -7px rgba(0,0,0,0.75);
+    transition: all .2s;
+}
+
+.categoryBtn:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+}
