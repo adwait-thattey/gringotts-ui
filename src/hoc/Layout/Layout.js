@@ -25,14 +25,14 @@ class layout extends Component {
     render(){
         return (
             <Aux>   
-                <Toolbar  toggleButton={<DrawerToggle clicked={this.sideDrawerToggleHandler}/>} />
+                <Toolbar toggleButton={<DrawerToggle clicked={this.sideDrawerToggleHandler}/>} />
                 <SideDawer 
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler}
                 />
-                    <main>
-                        {this.props.children}
-                    </main>
+                <main>
+                    {this.props.children}
+                </main>
                 <Footer />
             </Aux>
         );
