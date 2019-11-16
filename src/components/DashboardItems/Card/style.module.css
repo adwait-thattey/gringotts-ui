@@ -1,0 +1,59 @@
+.card {
+    padding: 1rem 2rem;
+    padding-bottom: 2rem;
+    box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid hsl(210, 73%, 55%);
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-weight: 500;
+    padding-bottom: 1rem;
+}
+
+.credListUl * {
+    font-size: 2rem;
+    padding: 0 2rem;
+}
+
+.credListUl {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 25rem;
+    overflow: auto;
+}
+  
+.credListli {
+    text-indent: -.7px;
+    font-weight: 600;
+    padding: 12px 10px;
+}
+
+.credListli::before {
+    content: "• ";
+    font-size: 20px;
+    color: blue; /* or whatever color you prefer */
+}
+
+.credListli:hover {
+    background: #ECF5FC;
+    cursor: pointer;
+}
+
+.credListli span {
+    position: relative;
+    left: 40px;
+}
+
+.faintText {
+    color: #D3D3D3;
+    font-weight: 600;
+    font-size: 2rem;
+}

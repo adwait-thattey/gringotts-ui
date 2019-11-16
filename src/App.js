@@ -5,6 +5,8 @@ import About from "./containers/about/index";
 import Dashboard from "./containers/dashboard/dashboard";
 import Auth from "./containers/auth/auth";
 import { Route, withRouter } from 'react-router-dom';
+import Engine from "./containers/kv/index";
+
 function App(props) {
   return (
       <React.Fragment>
@@ -12,7 +14,9 @@ function App(props) {
         <Route exact path="/" component={Homepage} />
         <Route exact path="/auth" component={Auth} />
         <Route path="/about" component={About} />
-        <Route path="/dashboard" component={Dashboard}/>*}
+        <Route path="/dashboard" component={Dashboard} exact/>
+        <Route path="/dashboard/kv" component={Engine}/>
+        
       </React.Fragment>
   );
 }

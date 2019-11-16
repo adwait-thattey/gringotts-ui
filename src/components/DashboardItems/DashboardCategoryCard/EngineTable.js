@@ -6,16 +6,15 @@ class EngineTable extends React.Component{
 
 
     render() {
-        let transformedEngines = this.props.engines.map(eng => {
-
-            return <TableCell
-                    object = {eng}
-                    active={eng === this.props.activeEngine}
-                    key={eng.id}
-                    content = {eng.name}
-                    click={this.props.engineClicked}
+        let transformedEngines = this.props.engines.map(eng => (
+                    <TableCell
+                        object = {eng}
+                        active={eng === this.props.activeEngine}
+                        key={eng.id}
+                        content = {eng.name}
+                        click={this.props.engineClicked}
                     />
-        });
+        ));
 
         let transformedEngineCells  = () => {
             let rows = [];
@@ -44,13 +43,11 @@ class EngineTable extends React.Component{
             <tbody>
             {transformedEngineCells()}
             <tr style={{color:"blue"}}>
-                <a href="/dashboard">
                     <TableCell
                         object={null}
                         content={"Create New Engine"}
 
                     />
-                </a>
             </tr>
             </tbody>
         </table>

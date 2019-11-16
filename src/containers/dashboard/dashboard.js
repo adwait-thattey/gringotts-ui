@@ -14,7 +14,6 @@ class Dashboard extends Component {
     state = {
         cards: {
             c1: {
-
                 Title: "Credential Manager",
                 Image: credentialsImage,
                 Desc: "Keep all your Passwords, Keys, Tokens, Notes, Bank Accounts, Payment Cards safe and easy to find.",
@@ -76,7 +75,6 @@ class Dashboard extends Component {
     componentDidMount() {
         this.getAllEngines();
     }
-
 
     render() {
         const transformedIcons = Object.keys(this.state.cards)

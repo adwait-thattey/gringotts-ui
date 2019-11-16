@@ -23,12 +23,12 @@
         }
 
         &_cell {
+            transition: .5s all;
+            padding-left: 1vw;
 
             width:50%;
             &:hover {
-                transition: .5s all;
-
-                padding-left: 1vw;
+                padding-left: 2vw;
                 cursor: pointer;
                 color: #283593;
 
@@ -72,10 +72,11 @@
     transition: 0.5s;
 }
 
+
 .engine-info-divider {
     margin-bottom: 2rem;
 }
-a, u{
+a, u {
     text-decoration: inherit;
     color: inherit;
 }
