@@ -9,6 +9,8 @@ import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
 import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
 
+import API from '../../utils/axios';
+
 class Dashboard extends Component {
     state = {
         cards: {
@@ -66,24 +68,47 @@ class Dashboard extends Component {
             },
 
         ],
-
         engines: []
 
     };
 
-    componentDidMount() {
-        this.getAllEngines();
+    async componentDidMount() {
+        try {
+            const res = await API.get('/api/engine', { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGQwMmJkOWQ0NjE4YjNjNzM4ZmRmOTIiLCJpYXQiOjE1NzM5MzM1ODksImV4cCI6MTU3MzkzNzE4OX0.tTm2kUkVvwJHEI1pFyEJ-ANzoOzfR2NK8U6ySs5CDrQ" } }) 
+            this.setState({ engines: this.getRequiredInfo(res.data) });
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    getRequiredInfo = (userObj) => {
+        let obtainedEngines = [];
+
+        userObj.map(engine => {
+            obtainedEngines.push({
+                id: engine.id,
+                name: engine.name,
+                type: engine.type,
+                createdOn: new Date(engine.createdOn).toDateString(),
+                health: true,
+                credCount: engine.credCount
+            })
+        })
+
+        return obtainedEngines;
     }
 
     render() {
+
+        console.log(this.state.engines);
+
         const transformedIcons = Object.keys(this.state.cards)
             .map((c, index) => (
-                <div className="col s12 m6 l3">
+                <div className="col s12 m6 l3" key={index}>
                     <DashboardIcons
                         image={this.state.cards[c].Image}
                         title={this.state.cards[c].Title}
                         desc={this.state.cards[c].Desc}
-                        key={index}
                     />  
                 </div>
             ));
@@ -112,95 +137,6 @@ class Dashboard extends Component {
             </Layout>
         );
     }
-
-    getAllEngines = () => {
-        // make an API call to get all engines
-        let obtainedEngines = [
-            {
-                id: "1",
-                name: "KV Eng 1",
-                type: "kv",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 25
-            },
-            {
-                id: "2",
-                name: "KV Eng 2",
-                type: "kv",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 9
-            },
-            {
-                id: "3",
-                name: "KV Eng 3",
-                type: "kv",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 56
-            },
-            {
-                id: "4",
-                name: "KV Eng 4",
-                type: "kv",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: "Multiple Errors",
-                credCount: 13
-            },
-            {
-                id: "5",
-                name: "AWS engine 1",
-                type: "aws",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 9
-            },
-            {
-                id: "6",
-                name: "AWS Engine 2",
-                type: "aws",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 8
-            },
-            {
-                id: "7",
-                name: "GPG Engine 1",
-                type: "gpg",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 4
-            },
-            {
-                id: "8",
-                name: "SSH Engine 1",
-                type: "ssh",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 36
-            },
-            {
-                id: "9",
-                name: "SSH Engine 2",
-                type: "ssh",
-                ownedBy: "Sample User",
-                createdOn: "some date",
-                health: true,
-                credCount: 45
-            },
-
-        ];
-        this.setState({engines: obtainedEngines});
-    };
 }
 
 export default Dashboard;

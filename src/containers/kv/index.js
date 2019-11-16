@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'react-materialize';
 import classes from './style.module.css';
-import Card from '../../components/DashboardItems/Card/index';
 import Tree from '../../components/TreeView/tree';
 import CredCard from "../../components/KV/CredCard/CredCard";
 import M from 'materialize-css';
+import API from '../../utils/axios';
+import axios from 'axios';
 
 class Engine extends Component {
     state = {
@@ -68,14 +69,9 @@ class Engine extends Component {
         this.state.createCredModalInstance.open()
     };
 
-    componentDidMount() {
-        this.setState({categories: this.getCategories()});
-
+    async componentDidMount() {
         var elems = document.querySelectorAll('.modal');
-        /*        var instances = M.Modal.init(elems, {
-                    inDuration: 300,
-                    outDuration: 500
-                });*/
+        
         let modalOptions = {
             inDuration: 300,
             outDuration: 500

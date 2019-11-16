@@ -2,6 +2,8 @@ import React from "react";
 import './DashboardCategoryCard.scss';
 import EngineTable from "./EngineTable";
 import TableCell from "./TableCell";
+import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 class DashboardCategoryCard extends React.Component {
 
@@ -32,22 +34,22 @@ class DashboardCategoryCard extends React.Component {
                 <tr>
                     <th>Type:</th>
                     <td> {eng.type}</td>
-                    <th> Owned By:</th>
-                    <td> {eng.ownedBy}</td>
-                </tr>
-
-                <tr>
                     <th> Created On:</th>
                     <td> {eng.createdOn}</td>
-                    <th> Secrets Count:</th>
-                    <td> {eng.credCount}</td>
                 </tr>
 
                 <tr>
+                    <th> Secrets Count:</th>
+                    <td> {eng.credCount}</td>
                     <th > Health:</th>
                     <td colSpan="2"> {this.getEngineHealth(eng.health)}</td>
+                </tr>
+
+                <tr>
                     <span style={{color:"blue"}}>
-                        <TableCell content="Go to Engine"/>
+                        <NavLink to={`${this.props.match.url}/kv/${eng.name}`} >
+                            <TableCell content="Go to Engine"/>
+                        </NavLink>
                     </span>
                     {/*<th colSpan="2" style={{color:"green",fontWeight:"bold",cursor:"pointer", textDecoration:"underline"}}> <a style={{textDecoration:"none"}} href="#">Go to Engine &gt;</a> </th>*/}
                 </tr>
@@ -117,4 +119,4 @@ class DashboardCategoryCard extends React.Component {
     }
 };
 
-export default DashboardCategoryCard;
+export default withRouter(DashboardCategoryCard);

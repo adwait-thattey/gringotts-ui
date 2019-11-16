@@ -22,14 +22,14 @@ class EngineTable extends React.Component{
             let ix=0;
             while (ix < cells.length) {
                 if (ix+1 < cells.length) {
-                    rows.push(  <tr>
+                    rows.push(  <tr key={ix}>
                                     {cells[ix]}
                                     {cells[ix+1]}
                                 </tr>
                     )
                 }
                 else {
-                    rows.push(  <tr>
+                    rows.push(  <tr key={ix}>
                             {cells[ix]}
                         </tr>
                     )
