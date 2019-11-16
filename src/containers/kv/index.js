@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 import classes from './style.module.css';
 import Card from '../../components/DashboardItems/Card/index';
+import Tree from '../../components/TreeView/tree';
 
 class Engine extends Component {
     state = {
@@ -42,7 +43,9 @@ class Engine extends Component {
                     <Col l={3}>
                         <aside>
                             <section className={classes.leftside}>
-                                <h1>HI</h1>
+                                <h1>
+                                    <Tree />
+                                </h1>
                             </section>
                         </aside>
                     </Col>

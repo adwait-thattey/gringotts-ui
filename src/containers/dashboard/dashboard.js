@@ -4,7 +4,7 @@ import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
-import DashboardIcons from '../../components/DashboardItems/DashboardIcons/DashboardIcons';
+
 import Layout from '../../hoc/Layout/Layout';
 import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
 import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
