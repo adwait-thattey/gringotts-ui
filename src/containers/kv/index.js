@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Row, Col} from 'react-materialize';
+import React, { Component } from 'react';
+import { Row, Col } from 'react-materialize';
 import classes from './style.module.css';
 import Tree from '../../components/TreeView/tree';
 import CredCard from "../../components/KV/CredCard/CredCard";
@@ -61,10 +61,7 @@ class Engine extends Component {
     }
 
     createCredential = category => {
-        console.log("create new cred sequence called for ", category)
-        console.log(this.state.createCredModalInstance)
-
-        this.setState({selectedCategoryForAdding: category});
+        this.setState({ selectedCategoryForAdding: category });
         this.state.createCredModalInstance.open()
     };
 
@@ -75,7 +72,7 @@ class Engine extends Component {
                 creds: category.creds.map(cred => {
                     return {
                         provider: cred.providerName,
-                        key: cred.credName
+                        key: cred.credName || cred.key
                     }
                 })
             }
@@ -83,36 +80,47 @@ class Engine extends Component {
         return updatedCategory;
     }
 
+    getEngineNameFromUrl = (url) => {
+        const locationSplitBySlash = url.split('/');
+        return locationSplitBySlash[locationSplitBySlash.length - 1];
+    }
+
     async componentDidMount() {
-        var elems = document.querySelectorAll('.modal');
-        
         let modalOptions = {
             inDuration: 300,
             outDuration: 500
         };
         let revealCredModal = document.getElementById('credModal');
         revealCredModal = M.Modal.init(revealCredModal, modalOptions);
-        this.setState({revealCredModalInstance: revealCredModal});
+        this.setState({ revealCredModalInstance: revealCredModal });
 
         let createCredModal = document.getElementById('createCredModal');
         createCredModal = M.Modal.init(createCredModal, modalOptions);
-        this.setState({createCredModalInstance: createCredModal});
+        this.setState({ createCredModalInstance: createCredModal });
 
-        const locationSplitBySlash = this.props.location.pathname.split('/');
-        const engineName = locationSplitBySlash[locationSplitBySlash.length - 1];
-    
+        const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
+
         try {
-            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5Mzc3NzAsImV4cCI6MTU3Mzk0MTM3MH0.8Goq8zVj42EvTVdK20nQK9riKbZx3qnGaZOkjLepZZU" } })
+            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" } })
             const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
+            console.log(updateObj);
             this.setState({ categories: updateObj })
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
 
     }
 
-    retrieveSecret = cred => {
-        // get secret
+    retrieveSecret = async cred => {
+        const credName = cred.key || cred.credName;
+        const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
+        const categoryName = this.state.selectedCategoryForAdding;
+
+        const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
+            headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" }
+        })
+        console.log(res.data);
+
         return "supersecret005"
     };
 
@@ -133,7 +141,6 @@ class Engine extends Component {
         const secret = this.retrieveSecret(cred);
         const curComponent = this;
         navigator.clipboard.writeText(secret).then(function () {
-            console.log('Async: Copying to clipboard was successful!');
             curComponent.setState({
                 selectedCred: {
                     provider: cred.provider,
@@ -147,22 +154,27 @@ class Engine extends Component {
         });
     };
 
-    credClicked = cred => {
-        console.log(this.state);
-        console.log(this.state.revealCredModalInstance);
-
-        this.setState({selectedCred: {...cred, secret: "*******"}});
-
+    credClicked = (cred, category) => {
+        this.setState({ selectedCred: { ...cred, secret: "*******" }, selectedCategoryForAdding: category });
         this.state.revealCredModalInstance.open();
-        console.log("Cred clicked", this.state.selectedCred);
-
     };
 
-    addNewCredential = () => {
-      const newCredKey = document.getElementById('new-cred-key-input').value;
-      const newCredValue = document.getElementById('new-cred-secret-input').value;
+    addNewCredential = async () => {
+        const newCredKey = document.getElementById('new-cred-key-input').value;
+        const newCredValue = document.getElementById('new-cred-secret-input').value;
+        const newProviderValue = document.getElementById('new-cred-provider-input').value;
 
-      console.log(newCredKey, newCredValue);
+        try {
+            const res = await API.post(`/api/creds/secret/${this.getEngineNameFromUrl(this.props.location.pathname)}/kv/${this.state.selectedCategoryForAdding}`, {
+                "credName": newCredKey,
+                "credValue": newCredValue,
+                "providerName": newProviderValue
+            }, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" } })
+        
+            console.log(res.data);
+        } catch(e) {
+            console.log(e);
+        }
     };
 
     createCategory = () => {
@@ -190,7 +202,10 @@ class Engine extends Component {
         }
     }
     render() {
-        let {selectedCred} = this.state;
+        this.props.location.pathname.split('/');
+
+        let { selectedCred } = this.state;
+        selectedCred && console.log(selectedCred.secret);
         if (!selectedCred) {
             selectedCred = {
                 key: "No Credential Selected",
@@ -199,7 +214,7 @@ class Engine extends Component {
                 secret: "*******"
             }
         }
-        const {categories} = this.state;
+        const { categories } = this.state;
         const credCards = categories.map(cat => {
             return <CredCard category={cat} key={cat.name} credClicked={this.credClicked}
                              createCred={this.createCredential}/>
@@ -212,7 +227,7 @@ class Engine extends Component {
                             <aside className="hide-on-med-and-down">
                                 <section className={classes.leftside}>
                                     <h1>
-                                        <Tree/>
+                                        <Tree />
                                     </h1>
                                 </section>
                             </aside>
@@ -260,8 +275,8 @@ class Engine extends Component {
                             <span className="cred-cell__provider">( {selectedCred.provider})</span>
                         </div>
                         <div className="secret-modal__content_secret-container">
-                            <span>Secret : </span> <span
-                            className="secret-modal__content_secret">{selectedCred.secret}</span>
+                            <span>Secret : </span> <span>
+                                className="secret-modal__content_secret">{selectedCred.secret}</span>
                         </div>
                         <div>
                             <div className="btn waves-effect cyan darken-4" onClick={this.secretRevealClicked}><i
@@ -275,7 +290,7 @@ class Engine extends Component {
                         </div>
                     </div>
 
-                    <div className="divider cred-card-divider"/>
+                    <div className="divider cred-card-divider" />
                     <div className="modal-footer secret-modal__footer">`
                         <a href="#!" className="modal-close waves-effect waves-red btn red darken-4">Close</a>
                     </div>
@@ -290,22 +305,27 @@ class Engine extends Component {
                         <div className="create-cred-modal__content_secret-container">
                             <div className="row">
                                 <div className="input-field col s12">
-                                    <input id="new-cred-key-input" type="text" className="validate"/>
+                                    <input id="new-cred-key-input" type="text" className="validate" />
                                     <label htmlFor="new-cred-key-input">Key</label>
                                 </div>
 
                                 <div className="input-field col s12">
+                                    <input id="new-cred-provider-input" type="text" className="validate" />
+                                    <label htmlFor="new-cred-provider-input">Provider</label>
+                                </div>
+
+                                <div className="input-field col s12">
                                     <input id="new-cred-secret-input" type="password" className="validate" />
-                                        <label htmlFor="new-cred-secret-input">Secret</label>
+                                    <label htmlFor="new-cred-secret-input">Secret</label>
                                 </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <div className="divider cred-card-divider"/>
+                    <div className="divider cred-card-divider" />
                     <div className="modal-footer create-cred-modal__footer">
-                        <a href="#!" className="waves-effect waves-yellow btn yellow darken-4" onClick={ () => M.updateTextFields()}>Reset</a>&nbsp;
+                        <a href="#!" className="waves-effect waves-yellow btn yellow darken-4" onClick={() => M.updateTextFields()}>Reset</a>&nbsp;
                         <a href="#!" className="modal-close waves-effect waves-green btn green darken-4" onClick={this.addNewCredential}>Submit</a>&nbsp;
                         <a href="#!" className="modal-close waves-effect waves-red btn red darken-4">Cancel</a>&nbsp;
                     </div>

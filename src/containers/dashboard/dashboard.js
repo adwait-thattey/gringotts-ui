@@ -68,7 +68,8 @@ class Dashboard extends Component {
             },
 
         ],
-        engines: []
+        engines: [],
+        token: localStorage.getItem("AUTH_TOKEN")
 
     };
 
@@ -84,8 +85,9 @@ class Dashboard extends Component {
     };
 
     async componentDidMount() {
+        console.log(this.state.token);
         try {
-            const res = await API.get('/api/engine', { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGQwMmJkOWQ0NjE4YjNjNzM4ZmRmOTIiLCJpYXQiOjE1NzM5MzM1ODksImV4cCI6MTU3MzkzNzE4OX0.tTm2kUkVvwJHEI1pFyEJ-ANzoOzfR2NK8U6ySs5CDrQ" } }) 
+            const res = await API.get('/api/engine', { headers: { "auth-token": `Bearer ${this.state.token}` } }) 
             this.setState({ engines: this.getRequiredInfo(res.data) });
         } catch(e) {
             console.log(e);
@@ -110,8 +112,6 @@ class Dashboard extends Component {
     }
 
     render() {
-
-        console.log(this.state.engines);
 
         const transformedIcons = Object.keys(this.state.cards)
             .map((c, index) => (

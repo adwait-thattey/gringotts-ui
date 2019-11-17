@@ -6,7 +6,7 @@ class CredTable extends React.Component {
     render() {
 
         const transformedCells = this.props.creds.map((cred, index) => {
-            return <td key={index} className="cred-cell" onClick={() => this.props.credClicked(cred)}>
+            return <td key={index} className="cred-cell" onClick={() => this.props.credClicked(cred, this.props.cat)}>
                 <a href="javascript:void(0)" className="cred-cell-link">
                     <span className="cred-cell__key">{cred.key}</span>
                     <span className="cred-cell__provider">( {cred.provider} )</span>
