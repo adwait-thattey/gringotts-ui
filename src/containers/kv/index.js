@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'react-materialize';
 import classes from './style.module.css';
-import Card from '../../components/DashboardItems/Card/index';
 import Tree from '../../components/TreeView/tree';
 import CredCard from "../../components/KV/CredCard/CredCard";
 import M from 'materialize-css';
+import API from '../../utils/axios';
 
 class Engine extends Component {
     state = {
@@ -68,14 +68,24 @@ class Engine extends Component {
         this.state.createCredModalInstance.open()
     };
 
-    componentDidMount() {
-        this.setState({categories: this.getCategories()});
+    getUpdatedObj = (obj) => {
+        const updatedCategory = obj.categories.map(category => {
+            return {
+                categoryName: category.name,
+                creds: category.creds.map(cred => {
+                    return {
+                        provider: cred.providerName,
+                        key: cred.credName
+                    }
+                })
+            }
+        })
+        return updatedCategory;
+    }
 
+    async componentDidMount() {
         var elems = document.querySelectorAll('.modal');
-        /*        var instances = M.Modal.init(elems, {
-                    inDuration: 300,
-                    outDuration: 500
-                });*/
+        
         let modalOptions = {
             inDuration: 300,
             outDuration: 500
@@ -87,6 +97,17 @@ class Engine extends Component {
         let createCredModal = document.getElementById('createCredModal');
         createCredModal = M.Modal.init(createCredModal, modalOptions);
         this.setState({createCredModalInstance: createCredModal});
+
+        const locationSplitBySlash = this.props.location.pathname.split('/');
+        const engineName = locationSplitBySlash[locationSplitBySlash.length - 1];
+    
+        try {
+            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5Mzc3NzAsImV4cCI6MTU3Mzk0MTM3MH0.8Goq8zVj42EvTVdK20nQK9riKbZx3qnGaZOkjLepZZU" } })
+            const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
+            this.setState({ categories: updateObj })
+        } catch(e) {
+            console.log(e);
+        }
 
     }
 
@@ -182,7 +203,6 @@ class Engine extends Component {
         const credCards = categories.map(cat => {
             return <CredCard category={cat} key={cat.name} credClicked={this.credClicked}
                              createCred={this.createCredential}/>
-            // return <CredCard />
         });
         return (
             <React.Fragment>

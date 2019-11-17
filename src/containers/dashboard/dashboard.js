@@ -4,11 +4,12 @@ import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
 import gpgImage from '../../images/components/cards/GPG.png';
-
 import Layout from '../../hoc/Layout/Layout';
 import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
 import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
+
+import API from '../../utils/axios';
 
 class Dashboard extends Component {
     state = {
@@ -67,7 +68,6 @@ class Dashboard extends Component {
             },
 
         ],
-
         engines: []
 
     };
@@ -82,19 +82,44 @@ class Dashboard extends Component {
 
         this.setState({engines: engines});
     };
-    componentDidMount() {
-        this.getAllEngines();
+
+    async componentDidMount() {
+        try {
+            const res = await API.get('/api/engine', { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGQwMmJkOWQ0NjE4YjNjNzM4ZmRmOTIiLCJpYXQiOjE1NzM5MzM1ODksImV4cCI6MTU3MzkzNzE4OX0.tTm2kUkVvwJHEI1pFyEJ-ANzoOzfR2NK8U6ySs5CDrQ" } }) 
+            this.setState({ engines: this.getRequiredInfo(res.data) });
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    getRequiredInfo = (userObj) => {
+        let obtainedEngines = [];
+
+        userObj.map(engine => {
+            obtainedEngines.push({
+                id: engine.id,
+                name: engine.name,
+                type: engine.type,
+                createdOn: new Date(engine.createdOn).toDateString(),
+                health: true,
+                credCount: engine.credCount
+            })
+        })
+
+        return obtainedEngines;
     }
 
     render() {
+
+        console.log(this.state.engines);
+
         const transformedIcons = Object.keys(this.state.cards)
             .map((c, index) => (
-                <div className="col s12 m6 l3">
+                <div className="col s12 m6 l3" key={index}>
                     <DashboardIcons
                         image={this.state.cards[c].Image}
                         title={this.state.cards[c].Title}
                         desc={this.state.cards[c].Desc}
-                        key={index}
                     />  
                 </div>
             ));

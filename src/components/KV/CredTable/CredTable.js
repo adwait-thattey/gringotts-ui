@@ -5,8 +5,8 @@ class CredTable extends React.Component {
 
     render() {
 
-        const transformedCells = this.props.creds.map(cred => {
-            return <td className="cred-cell" onClick={() => this.props.credClicked(cred)}>
+        const transformedCells = this.props.creds.map((cred, index) => {
+            return <td key={index} className="cred-cell" onClick={() => this.props.credClicked(cred)}>
                 <a href="javascript:void(0)" className="cred-cell-link">
                     <span className="cred-cell__key">{cred.key}</span>
                     <span className="cred-cell__provider">( {cred.provider} )</span>
@@ -14,7 +14,7 @@ class CredTable extends React.Component {
             </td>
         });
 
-        const credRows = transformedCells.map(cell => <tr>{cell}</tr>);
+        const credRows = transformedCells.map((cell, index) => <tr key={index}>{cell}</tr>);
         return <table className="responsive-table striped category-table">
             <tbody>
             <td className="cred-cell cred-cell__create" >

@@ -2,9 +2,6 @@ import React from "react";
 import './credcard.scss'
 import CredTable from "../CredTable/CredTable";
 class CredCard extends React.Component {
-    state = {};
-
-
     render() {
 
         return <div className="cred-card">
