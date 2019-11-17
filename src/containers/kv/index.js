@@ -68,7 +68,7 @@ class Engine extends Component {
     getUpdatedObj = (obj) => {
         const updatedCategory = obj.categories.map(category => {
             return {
-                categoryName: category.name,
+                name: category.name,
                 creds: category.creds.map(cred => {
                     return {
                         provider: cred.providerName,
@@ -101,7 +101,7 @@ class Engine extends Component {
         const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
 
         try {
-            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" } })
+            const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } });
             const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
             console.log(updateObj);
             this.setState({ categories: updateObj })
@@ -117,7 +117,7 @@ class Engine extends Component {
         const categoryName = this.state.selectedCategoryForAdding;
 
         const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
-            headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" }
+            headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` }
         })
         console.log(res.data);
 
