@@ -8,13 +8,17 @@ import axios from 'axios';
 import M from 'materialize-css';
 
 class Auth extends Component{
-    state ={
-			authFields: {
-				username: '',
-				email: '',
-				password: '',
-			},
-		}
+    state = {
+		authFields: {
+			username: '',
+			email: '',
+			password: '',
+		},
+		message: null,
+		error: null,
+	}
+
+	
 		
     componentDidMount() {
 		M.Tabs.init(this.Tabs);
@@ -36,7 +40,6 @@ class Auth extends Component{
 				
 		}
 		this.setState({	authFields: authFields,});
-		console.log(authFields);
 	}
 
 	registerHandler = (e) => {
@@ -49,9 +52,11 @@ class Auth extends Component{
 		axios.post('http://localhost:8000/api/auth/register', user)
 			.then(response => {
 				console.log(response.data);
+				this.setState({ message: response.data.success})
 			})
 			.catch(error => {
-				console.log(error.message);
+				console.log(error.response.data.err);
+				this.setState({ error: error.response.data.err})
 			})
 	}
 
@@ -65,16 +70,33 @@ class Auth extends Component{
 			.then( response => {
 				localStorage.setItem('AUTH_TOKEN', response.data);
 				console.log(response.data);
+				this.props.history.push('/dashboard');
 			})
 			.catch(error => {
-				console.log(error.message);
+				console.log(error.response.data.err)
+				this.setState({ error: error.response.data.err})
 			});
 	}
 
     render(){
-        return(
+		console.log(this.state.message);
+		let message = null;
+        let error = null;		
+		if(this.state.message){
+			message =  <div className="alertDivMessage">
+							<h5>{this.state.message}</h5>
+						</div>
+		}
+		if(this.state.error){
+			error =  <div className="alertDivError">
+							<h5>{this.state.error}</h5>
+						</div>
+		}
+		return(
             <Layout>
                 <section>
+					{message}
+					{error}		
                     <div className='contDiv'>
 					<div className="row"> 
 						<ul ref={Tabs => {this.Tabs = Tabs;}} className="tabs col s12" >

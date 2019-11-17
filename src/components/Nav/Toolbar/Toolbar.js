@@ -29,8 +29,7 @@ const toolbar = (props) => (
                         </div>
                     </li>
 					<ul className="right hide-on-med-and-down">
-						{/* <li ><a href="/"><b>Sign Up</b></a></li> */}
-						<li><a href="/"><b>Sign Out</b></a></li>
+                        {props.token ? <li><a href='/auth' onClick={props.logout}><b>Log Out</b></a></li> : <li ><a href="/auth"><b>Log In</b></a></li>}
                         <li></li>
 					</ul>     
                 </ul>

@@ -22,10 +22,20 @@ class layout extends Component {
         });  
     }
 
+    token = localStorage.getItem('AUTH_TOKEN');
+    
+    logoutHandler = () => {
+        this.token = localStorage.setItem('AUTH_TOKEN', '') ;
+        this.props.histroy.push('/auth');
+    }
+    
     render(){
         return (
             <Aux>   
-                <Toolbar toggleButton={<DrawerToggle clicked={this.sideDrawerToggleHandler}/>} />
+                <Toolbar toggleButton={<DrawerToggle clicked={this.sideDrawerToggleHandler}/>} 
+                         token={this.token} 
+                         logout={this.logoutHandler}
+                 />
                 <SideDawer 
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler}
