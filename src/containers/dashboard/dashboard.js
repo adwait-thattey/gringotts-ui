@@ -68,13 +68,15 @@ class Dashboard extends Component {
             },
 
         ],
-        engines: []
+        engines: [],
+        token: localStorage.getItem("AUTH_TOKEN")
 
     };
 
     async componentDidMount() {
+        console.log(this.state.token);
         try {
-            const res = await API.get('/api/engine', { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" } }) 
+            const res = await API.get('/api/engine', { headers: { "auth-token": `Bearer ${this.state.token}` } }) 
             this.setState({ engines: this.getRequiredInfo(res.data) });
         } catch(e) {
             console.log(e);

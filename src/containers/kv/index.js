@@ -67,7 +67,16 @@ class Engine extends Component {
 
     }
 
-    retrieveSecret = cred => {
+    retrieveSecret = async cred => {
+        const credName = cred.key || cred.credName;
+        const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
+        const categoryName = this.state.selectedCategoryForAdding;
+
+        const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
+            headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" }
+        })
+        console.log(res.data);
+
         return "supersecret005"
     };
 
@@ -101,9 +110,8 @@ class Engine extends Component {
         });
     };
 
-    credClicked = cred => {
-        this.setState({ selectedCred: { ...cred, secret: "*******" } });
-
+    credClicked = (cred, category) => {
+        this.setState({ selectedCred: { ...cred, secret: "*******" }, selectedCategoryForAdding: category });
         this.state.revealCredModalInstance.open();
     };
 
@@ -123,14 +131,13 @@ class Engine extends Component {
         } catch(e) {
             console.log(e);
         }
-
-
     };
 
     render() {
         this.props.location.pathname.split('/');
 
         let { selectedCred } = this.state;
+        selectedCred && console.log(selectedCred.secret);
         if (!selectedCred) {
             selectedCred = {
                 key: "No Credential Selected",
@@ -142,7 +149,7 @@ class Engine extends Component {
         const { categories } = this.state;
         const credCards = categories.map(cat => {
             return <CredCard category={cat} key={cat.categoryName} credClicked={this.credClicked}
-                createCred={this.createCredential} />
+                createCred={this.createCredential}/>
         });
         return (
             <React.Fragment>
@@ -177,7 +184,7 @@ class Engine extends Component {
                             <span className="cred-cell__provider">( {selectedCred.provider})</span>
                         </div>
                         <div className="secret-modal__content_secret-container">
-                            <span>Secret : </span> <span
+                            <span>Secret : </span> <span>
                                 className="secret-modal__content_secret">{selectedCred.secret}</span>
                         </div>
                         <div>
