@@ -13,13 +13,13 @@ class CredCard extends React.Component {
                     <div className="card small">
                         <span className="card-title cyan-text text-darken-4">
                             <span className="cred-card__title title">
-                                {this.props.category.categoryName.toUpperCase()} <span className="cred-card__title_icon">&gt;</span>
+                                {this.props.category.name.toUpperCase()} <span className="cred-card__title_icon">&gt;</span>
                             </span>
                         </span>
                         <div className="divider cred-card-divider" />
                         <div className="card-content ">
                             <div className="cred-card__content">
-                                <CredTable creds={this.props.category.creds} cat={this.props.category.categoryName} credClicked={this.props.credClicked} createCred={this.props.createCred} />
+                                <CredTable creds={this.props.category.creds} cat={this.props.category.name} credClicked={this.props.credClicked} createCred={this.props.createCred} />
                             </div>
                         </div>
                     </div>

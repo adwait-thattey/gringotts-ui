@@ -19,7 +19,7 @@ class Engine extends Component {
     getCategories = () => {
         return [
             {
-                categoryName: "email",
+                name: "email",
                 creds: [
                     {"provider": "GMail", "key": "x@gmail.com", "_id": "2432523"},
                     {"provider": "GMail", "key": "y@gmail.com", "_id": "24dw2523"},
@@ -29,7 +29,7 @@ class Engine extends Component {
                 ]
             },
             {
-                categoryName: "entertainment",
+                name: "entertainment",
                 creds: [
                     {"provider": "Netflix", "key": "sampleuser001", "_id": "2432aed"},
                     {"provider": "DC Prime", "key": "sampleuser002", "_id": "24dw252ed"},
@@ -39,7 +39,7 @@ class Engine extends Component {
                 ]
             },
             {
-                categoryName: "social",
+                name: "social",
                 creds: [
                     {"provider": "Twitter", "key": "x@gmail.com", "_id": "24325dfs"},
                     {"provider": "DevRant", "key": "y@gmail.com", "_id": "24dw2asds"},
@@ -48,7 +48,7 @@ class Engine extends Component {
                 ]
             },
             {
-                categoryName: "other",
+                name: "other",
                 creds: [
                     {"provider": "acm.dl", "key": "x@gmail.com", "_id": "2432sdas"},
                     {"provider": "acm.dl", "key": "y@gmail.com", "_id": "24dw2asdas"},
@@ -143,6 +143,31 @@ class Engine extends Component {
 
       console.log(newCredKey, newCredValue);
     };
+
+    createCategory = () => {
+        const newCatName = document.getElementById('new-category-input').value.toLowerCase();
+        if (!newCatName){
+            console.log("No name given");
+            return
+        }
+        const currentCategories = this.state.categories;
+        const existingCategories = currentCategories.filter(cat=>cat.name===newCatName);
+        if (existingCategories.length > 0) {
+            console.log("Category Already Exists")
+            return
+        }
+        else {
+            const newCat = {
+                name: newCatName,
+                creds: []
+            };
+
+            // call API to create category
+            currentCategories.push(newCat);
+
+            this.setState({categories:currentCategories});
+        }
+    }
     render() {
         let {selectedCred} = this.state;
         if (!selectedCred) {
@@ -155,7 +180,7 @@ class Engine extends Component {
         }
         const {categories} = this.state;
         const credCards = categories.map(cat => {
-            return <CredCard category={cat} key={cat.categoryName} credClicked={this.credClicked}
+            return <CredCard category={cat} key={cat.name} credClicked={this.credClicked}
                              createCred={this.createCredential}/>
             // return <CredCard />
         });
@@ -180,7 +205,7 @@ class Engine extends Component {
                                         <Col l={6} key={index}>
                                             <div className={classes.cardWrapper}>
                                                 <Card
-                                                    categoryName={category.categoryName}
+                                                    name={category.name}
                                                     credList={category.creds}
                                                 />
                                             </div>
@@ -189,6 +214,20 @@ class Engine extends Component {
                                 </Row>*/}
                                 <div className="row">
                                     {credCards.map(cc => <div className="col s12 m6">{cc}</div>)}
+                                    <div className="col s12">
+                                        <div className="row">
+                                            <div className="col s12 m10">
+                                              <div className="input-field">
+                                                    <input id="new-category-input" type="text" className="validate" />
+                                                    <label htmlFor="new-category-input">Create Category</label>
+                                                </div>
+                                                <div className="">
+                                                    <a href="#!" onClick={this.createCategory} className="btn green darken-4">Create</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </section>
                         </div>

@@ -42,11 +42,10 @@ class EngineTable extends React.Component{
         return <table className="responsive-table striped engine-table">
             <tbody>
             {transformedEngineCells()}
-            <tr style={{color:"blue"}}>
+            <tr style={{color:"blue"}} onClick={()=> this.props.createEngine(this.props.category.name)}>
                     <TableCell
                         object={null}
                         content={"Create New Engine"}
-
                     />
             </tr>
             </tbody>

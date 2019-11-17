@@ -72,6 +72,16 @@ class Dashboard extends Component {
 
     };
 
+    createEngine = type => {
+        // call API to create engine
+
+        // for sample
+        console.log("create new engine", type);
+        const engines = this.state.engines;
+        engines.push({id:"xyz",name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true})
+
+        this.setState({engines: engines});
+    };
     componentDidMount() {
         this.getAllEngines();
     }
@@ -99,6 +109,7 @@ class Dashboard extends Component {
                     title={cat.verboseName}
                     key={cat.name}
                     category={cat}
+                    createEngine = {this.createEngine}
                 />
             }
             return "";
@@ -113,6 +124,8 @@ class Dashboard extends Component {
             </Layout>
         );
     }
+
+
 
     getAllEngines = () => {
         // make an API call to get all engines

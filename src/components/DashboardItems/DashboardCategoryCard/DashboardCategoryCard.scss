@@ -2,6 +2,7 @@
     margin: 2vh 5vw 1vh 5vw;
     min-height: 30vh;
 
+
     &__inner {
 
         font-size: 1.5rem;
@@ -12,6 +13,9 @@
 
         font-family: 'Raleway', sans-serif;
         font-weight: bolder;
+
+        //height: 50px;
+        overflow:auto;
 
 
         &_icon {

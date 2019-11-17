@@ -95,8 +95,12 @@ class DashboardCategoryCard extends React.Component {
                                             <div className="divider engine-info-divider"/>
 
                                             <EngineTable engines={this.props.engines}
+                                                         category = {this.props.category}
                                                          engineClicked={this.engineClickedHandler}
-                                                         activeEngine={this.state.activeEngine}/>
+                                                         activeEngine={this.state.activeEngine}
+                                                         createEngine = {this.props.createEngine}
+
+                                            />
                                         </div>
                                     </div>
                                 </div>
