@@ -116,29 +116,30 @@ class Engine extends Component {
         const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
         const categoryName = this.state.selectedCategoryForAdding;
 
+        console.log(credName, engineName, categoryName);
+
         const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
             headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` }
         })
-        console.log(res.data);
 
-        return "supersecret005"
+        return res.data.data;
     };
 
-    secretRevealClicked = () => {
+    secretRevealClicked = async () => {
         const cred = this.state.selectedCred;
         this.setState({
             selectedCred: {
                 provider: cred.provider,
                 key: cred.key,
                 "_id": cred["_id"],
-                secret: this.retrieveSecret(cred)
+                secret: await this.retrieveSecret(cred)
             }
         })
     };
 
-    secretCopyCLicked = () => {
+    secretCopyCLicked = async () => {
         const cred = this.state.selectedCred;
-        const secret = this.retrieveSecret(cred);
+        const secret = await this.retrieveSecret(cred);
         const curComponent = this;
         navigator.clipboard.writeText(secret).then(function () {
             curComponent.setState({
@@ -169,9 +170,16 @@ class Engine extends Component {
                 "credName": newCredKey,
                 "credValue": newCredValue,
                 "providerName": newProviderValue
-            }, { headers: { "auth-token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGNmZDIxNDZkOGFjNzIwN2I5NTYzZDEiLCJpYXQiOjE1NzM5NDM1MzUsImV4cCI6MTU3Mzk0NzEzNX0.lDYh4vYbXHQ65_qRO42M-OBVGC4AOI0aaJRoFtu415w" } })
+            }, { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } })
         
             console.log(res.data);
+
+            const allCategories = this.state.categories;
+            const reqCat = this.state.categories.filter(cat=> cat.name===this.state.selectedCategoryForAdding)[0];
+            const reqCatIx = allCategories.findIndex(reqCat)
+            allCategories[reqCatIx].creds.push({"provider":newProviderValue, "key":newCredKey, "_id":"sfdweadf"})
+
+            this.setState({categories:allCategories})
         } catch(e) {
             console.log(e);
         }
@@ -275,7 +283,7 @@ class Engine extends Component {
                             <span className="cred-cell__provider">( {selectedCred.provider})</span>
                         </div>
                         <div className="secret-modal__content_secret-container">
-                            <span>Secret : </span> <span>
+                            <span>Secret : </span> <span
                                 className="secret-modal__content_secret">{selectedCred.secret}</span>
                         </div>
                         <div>
@@ -305,17 +313,17 @@ class Engine extends Component {
                         <div className="create-cred-modal__content_secret-container">
                             <div className="row">
                                 <div className="input-field col s12">
-                                    <input id="new-cred-key-input" type="text" className="validate" />
+                                    <input autoComplete={false} id="new-cred-key-input" type="text" className="validate" />
                                     <label htmlFor="new-cred-key-input">Key</label>
                                 </div>
 
                                 <div className="input-field col s12">
-                                    <input id="new-cred-provider-input" type="text" className="validate" />
+                                    <input autoComplete={false} id="new-cred-provider-input" type="text" className="validate" />
                                     <label htmlFor="new-cred-provider-input">Provider</label>
                                 </div>
 
                                 <div className="input-field col s12">
-                                    <input id="new-cred-secret-input" type="password" className="validate" />
+                                    <input autoComplete={false} id="new-cred-secret-input" type="password" className="validate" />
                                     <label htmlFor="new-cred-secret-input">Secret</label>
                                 </div>
                             </div>
