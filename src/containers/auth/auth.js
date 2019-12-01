@@ -14,8 +14,6 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-
-
 class Auth extends Component {
 	state = {
 		authFields: {

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'react-materialize';
-import classes from './style.module.css';
-import Tree from '../../components/TreeView/tree';
 import CredCard from "../../components/KV/CredCard/CredCard";
 import M from 'materialize-css';
 import API from '../../utils/axios';
+import SideLayout from '../../hoc/sidelayout/sidelayout';
 
 class Engine extends Component {
     state = {
@@ -14,51 +12,6 @@ class Engine extends Component {
         selectedCred: null,
         selectedCategoryForAdding: null
     };
-
-
-    getCategories = () => {
-        return [
-            {
-                name: "email",
-                creds: [
-                    {"provider": "GMail", "key": "x@gmail.com", "_id": "2432523"},
-                    {"provider": "GMail", "key": "y@gmail.com", "_id": "24dw2523"},
-                    {"provider": "Outlook", "key": "x@outlook.com", "_id": "243eqw523"},
-                    {"provider": "Outlook", "key": "y@outlook.com", "_id": "2432ewaw"},
-                    {"provider": "GMail", "key": "x@gmail.com", "_id": "24325aewad"}
-                ]
-            },
-            {
-                name: "entertainment",
-                creds: [
-                    {"provider": "Netflix", "key": "sampleuser001", "_id": "2432aed"},
-                    {"provider": "DC Prime", "key": "sampleuser002", "_id": "24dw252ed"},
-                    {"provider": "Netflix", "key": "sampleuser003", "_id": "243eqw52aa"},
-                    {"provider": "Amazon Prime", "key": "sampleuser004", "_id": "2432aewfdae"},
-                    {"provider": "HotStar", "key": "sampleuser005", "_id": "24325wededd"}
-                ]
-            },
-            {
-                name: "social",
-                creds: [
-                    {"provider": "Twitter", "key": "x@gmail.com", "_id": "24325dfs"},
-                    {"provider": "DevRant", "key": "y@gmail.com", "_id": "24dw2asds"},
-                    {"provider": "Twitter", "key": "x@outlook.com", "_id": "243eqwasd"},
-                    {"provider": "Reddit", "key": "x@gmail.com", "_id": "24325aewasd"}
-                ]
-            },
-            {
-                name: "other",
-                creds: [
-                    {"provider": "acm.dl", "key": "x@gmail.com", "_id": "2432sdas"},
-                    {"provider": "acm.dl", "key": "y@gmail.com", "_id": "24dw2asdas"},
-                    {"provider": "acm.dl", "key": "x@outlook.com", "_id": "243easda"},
-                    {"provider": "outlook", "key": "y@outlook.com", "_id": "2432ewaw"},
-                    {"provider": "gmail", "key": "x@gmail.com", "_id": "24325aewad"}
-                ]
-            }
-        ]
-    }
 
     createCredential = category => {
         this.setState({ selectedCategoryForAdding: category });
@@ -103,7 +56,6 @@ class Engine extends Component {
         try {
             const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } });
             const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
-            console.log(updateObj);
             this.setState({ categories: updateObj })
         } catch (e) {
             console.log(e);
@@ -116,13 +68,15 @@ class Engine extends Component {
         const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
         const categoryName = this.state.selectedCategoryForAdding;
 
-        console.log(credName, engineName, categoryName);
+        try {
+            const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
+                headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` }
+            })
+            return res.data.data;
+        } catch(e) {
+            console.log(e.response);
+        }
 
-        const res = await API.get(`api/creds/secret/${engineName}/${categoryName}/${credName}`, {
-            headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` }
-        })
-
-        return res.data.data;
     };
 
     secretRevealClicked = async () => {
@@ -171,28 +125,28 @@ class Engine extends Component {
                 "credValue": newCredValue,
                 "providerName": newProviderValue
             }, { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } })
-        
+
             console.log(res.data);
 
             const allCategories = this.state.categories;
-            const reqCat = this.state.categories.filter(cat=> cat.name===this.state.selectedCategoryForAdding)[0];
+            const reqCat = this.state.categories.filter(cat => cat.name === this.state.selectedCategoryForAdding)[0];
             const reqCatIx = allCategories.findIndex(reqCat)
-            allCategories[reqCatIx].creds.push({"provider":newProviderValue, "key":newCredKey, "_id":"sfdweadf"})
+            allCategories[reqCatIx].creds.push({ "provider": newProviderValue, "key": newCredKey, "_id": "sfdweadf" })
 
-            this.setState({categories:allCategories})
-        } catch(e) {
+            this.setState({ categories: allCategories })
+        } catch (e) {
             console.log(e);
         }
     };
 
     createCategory = () => {
         const newCatName = document.getElementById('new-category-input').value.toLowerCase();
-        if (!newCatName){
+        if (!newCatName) {
             console.log("No name given");
             return
         }
         const currentCategories = this.state.categories;
-        const existingCategories = currentCategories.filter(cat=>cat.name===newCatName);
+        const existingCategories = currentCategories.filter(cat => cat.name === newCatName);
         if (existingCategories.length > 0) {
             console.log("Category Already Exists")
             return
@@ -206,7 +160,7 @@ class Engine extends Component {
             // call API to create category
             currentCategories.push(newCat);
 
-            this.setState({categories:currentCategories});
+            this.setState({ categories: currentCategories });
         }
     }
     render() {
@@ -225,57 +179,30 @@ class Engine extends Component {
         const { categories } = this.state;
         const credCards = categories.map(cat => {
             return <CredCard category={cat} key={cat.name} credClicked={this.credClicked}
-                             createCred={this.createCredential}/>
+                createCred={this.createCredential} />
         });
         return (
             <React.Fragment>
-                <Row>
-                    <div className={classes.wrapper}>
-                        <Col l={3}>
-                            <aside className="hide-on-med-and-down">
-                                <section className={classes.leftside}>
-                                    <h1>
-                                        <Tree />
-                                    </h1>
-                                </section>
-                            </aside>
-                        </Col>
-                        <div className="col l9 s12">
-                            <section className={classes.rightside}>
-                                <h1 className="cyan-text text-darken-4 title page-title">Credentials</h1>
-                                {/*<Row className={classes.customRow}>
-                                    {categories && categories.map((category, index) => (
-                                        <Col l={6} key={index}>
-                                            <div className={classes.cardWrapper}>
-                                                <Card
-                                                    name={category.name}
-                                                    credList={category.creds}
-                                                />
-                                            </div>
-                                        </Col>
-                                    ))}
-                                </Row>*/}
-                                <div className="row">
-                                    {credCards.map(cc => <div className="col s12 m6">{cc}</div>)}
-                                    <div className="col s12">
-                                        <div className="row">
-                                            <div className="col s12 m10">
-                                              <div className="input-field">
-                                                    <input id="new-category-input" type="text" className="validate" />
-                                                    <label htmlFor="new-category-input">Create Category</label>
-                                                </div>
-                                                <div className="">
-                                                    <a href="#!" onClick={this.createCategory} className="btn green darken-4">Create</a>
-                                                </div>
-                                            </div>
-
-                                        </div>
+                <SideLayout>
+                    <h1 className="cyan-text text-darken-4 title page-title">Credentials</h1>
+                    <div className="row">
+                        {credCards.map(cc => <div className="col s12 m6">{cc}</div>)}
+                        <div className="col s12">
+                            <div className="row">
+                                <div className="col s12 m10">
+                                    <div className="input-field">
+                                        <input id="new-category-input" type="text" className="validate" />
+                                        <label htmlFor="new-category-input">Create Category</label>
+                                    </div>
+                                    <div className="">
+                                        <a href="#!" onClick={this.createCategory} className="btn green darken-4">Create</a>
                                     </div>
                                 </div>
-                            </section>
+                            </div>
                         </div>
                     </div>
-                </Row>
+                </SideLayout>
+
                 <div id="credModal" className="modal bottom-sheet secret-modal">
                     <div className="modal-content secret-model__content">
                         <div className="secret-modal__content_heading">
