@@ -5,8 +5,8 @@ import About from "./containers/about/index";
 import Dashboard from "./containers/dashboard/dashboard";
 import Auth from "./containers/auth/auth";
 import { Route, withRouter } from 'react-router-dom';
-import Engine from "./containers/kv/index";
-import WebCamOpen from './containers/temp-webcam';
+import KV from "./containers/kv/index";
+import AWS from "./containers/aws/index";
 
 function App(props) {
   return (
@@ -16,8 +16,8 @@ function App(props) {
         <Route exact path="/auth" component={Auth} />
         <Route path="/about" component={About} />
         <Route path="/dashboard" component={Dashboard} exact/>
-        <Route path="/dashboard/kv" component={Engine}/>
-        <Route path="/webcam" component={WebCamOpen} />
+        <Route path="/dashboard/kv" component={KV}/>
+        <Route path="/dashboard/aws" component={AWS} />
       </React.Fragment>
   );
 }
