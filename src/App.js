@@ -6,6 +6,7 @@ import Dashboard from "./containers/dashboard/dashboard";
 import Auth from "./containers/auth/auth";
 import { Route, withRouter } from 'react-router-dom';
 import Engine from "./containers/kv/index";
+import WebCamOpen from './containers/temp-webcam';
 
 function App(props) {
   return (
@@ -16,7 +17,7 @@ function App(props) {
         <Route path="/about" component={About} />
         <Route path="/dashboard" component={Dashboard} exact/>
         <Route path="/dashboard/kv" component={Engine}/>
-        
+        <Route path="/webcam" component={WebCamOpen} />
       </React.Fragment>
   );
 }
