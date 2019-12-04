@@ -52,7 +52,7 @@ class Engine extends Component {
         this.setState({ createCredModalInstance: createCredModal });
 
         const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
-
+        
         try {
             const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } });
             const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])

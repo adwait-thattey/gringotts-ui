@@ -85,10 +85,10 @@ class Dashboard extends Component {
     };
 
     async componentDidMount() {
-        console.log(this.state.token);
         try {
             const res = await API.get('/api/engine', { headers: { "auth-token": `Bearer ${this.state.token}` } }) 
             this.setState({ engines: this.getRequiredInfo(res.data) });
+            console.log(res.data)
         } catch(e) {
             console.log(e);
         }

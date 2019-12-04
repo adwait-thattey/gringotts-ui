@@ -29,6 +29,11 @@ class DashboardCategoryCard extends React.Component {
     }
     render() {
         let transformedEngineInfo = (eng) => {
+            const { url } = this.props.match;
+
+//             const updatedUrl = url.substring(0, url.length - 1);
+            const queryString = `${url}/${eng.type}/${eng.name}`
+            
             return <table className="responsive-table dark">
                 <tbody>
                 <tr>
@@ -47,7 +52,7 @@ class DashboardCategoryCard extends React.Component {
 
                 <tr>
                     <span style={{color:"blue"}}>
-                        <NavLink to={`${this.props.match.url}/${eng.type}/${eng.name}`} >
+                        <NavLink to={`${queryString}`} >
                             <TableCell content="Go to Engine"/>
                         </NavLink>
                     </span>
