@@ -135,6 +135,7 @@ export default function GmailTreeView(props) {
               labelInfo="90"
               color="#1a73e8"
               bgColor="#e8f0fe"
+              key={index}
             >
               {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
                 return (
@@ -163,9 +164,9 @@ export default function GmailTreeView(props) {
               nodeId={(Math.random() * 100).toString()}
               labelText={acc.name}
               labelIcon={SupervisorAccountIcon}
-              labelInfo="90"
               color="#1a73e8"
               bgColor="#e8f0fe"
+              key={index}
             >
               {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
                 return (
