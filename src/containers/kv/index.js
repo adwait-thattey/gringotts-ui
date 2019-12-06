@@ -177,8 +177,8 @@ class Engine extends Component {
             }
         }
         const { categories } = this.state;
-        const credCards = categories.map(cat => {
-            return <CredCard category={cat} key={cat.name} credClicked={this.credClicked}
+        const credCards = categories.map((cat, index) => {
+            return <CredCard category={cat} key={index} credClicked={this.credClicked}
                 createCred={this.createCredential} />
         });
         return (
@@ -186,7 +186,7 @@ class Engine extends Component {
                 <SideLayout>
                     <h1 className="cyan-text text-darken-4 title page-title">Credentials</h1>
                     <div className="row">
-                        {credCards.map(cc => <div className="col s12 m6">{cc}</div>)}
+                        {credCards.map((cc, index) => <div key={index} className="col s12 m6">{cc}</div>)}
                         <div className="col s12">
                             <div className="row">
                                 <div className="col s12 m10">
@@ -240,17 +240,17 @@ class Engine extends Component {
                         <div className="create-cred-modal__content_secret-container">
                             <div className="row">
                                 <div className="input-field col s12">
-                                    <input autoComplete={false} id="new-cred-key-input" type="text" className="validate" />
+                                    <input autoComplete={false.toString()} id="new-cred-key-input" type="text" className="validate" />
                                     <label htmlFor="new-cred-key-input">Key</label>
                                 </div>
 
                                 <div className="input-field col s12">
-                                    <input autoComplete={false} id="new-cred-provider-input" type="text" className="validate" />
+                                    <input autoComplete={false.toString()} id="new-cred-provider-input" type="text" className="validate" />
                                     <label htmlFor="new-cred-provider-input">Provider</label>
                                 </div>
 
                                 <div className="input-field col s12">
-                                    <input autoComplete={false} id="new-cred-secret-input" type="password" className="validate" />
+                                    <input autoComplete={false.toString()} id="new-cred-secret-input" type="password" className="validate" />
                                     <label htmlFor="new-cred-secret-input">Secret</label>
                                 </div>
                             </div>
