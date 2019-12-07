@@ -7,6 +7,8 @@ import Auth from "./containers/auth/auth";
 import { Route, withRouter } from 'react-router-dom';
 import KV from "./containers/kv/index";
 import AWS from "./containers/aws/index";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App(props) {
   return (
@@ -18,6 +20,7 @@ function App(props) {
         <Route path="/dashboard" component={Dashboard} exact/>
         <Route path="/dashboard/kv" component={KV}/>
         <Route path="/dashboard/aws" component={AWS} />
+        <ToastContainer />
       </React.Fragment>
   );
 }

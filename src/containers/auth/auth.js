@@ -5,8 +5,9 @@ import Register from '../../components/auth/register';
 import Layout from '../../hoc/Layout/Layout';
 import axios from 'axios';
 import Webcam from 'react-webcam'
-
+import { toast } from 'react-toastify';
 import M from 'materialize-css';
+import { withRouter } from 'react-router-dom';
 
 const videoConstraints = {
     width: 1280,
@@ -89,10 +90,12 @@ class Auth extends Component {
 		axios.post('http://localhost:8000/api/auth/login', user)
 			.then(response => {
 				localStorage.setItem('AUTH_TOKEN', response.data);
-				console.log(response.data);
+				toast.success("User successfully logged in");
+				this.props.history.push('/dashboard');
 			})
 			.catch(error => {
-				console.log(error.message);
+				console.log(error);
+				toast.error(error.response.data.err)
 			});
 	}
 
@@ -147,4 +150,4 @@ class Auth extends Component {
 }
 
 
-export default Auth;
+export default withRouter(Auth);
