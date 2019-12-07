@@ -73,15 +73,24 @@ class Dashboard extends Component {
 
     };
 
-    createEngine = type => {
+    createEngine = async type => {
         // call API to create engine
+        try {
+            const res = await API.post(`api/engine/${type}`, 
+                {},
+                { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } },
+            );  
+            const engines = this.state.engines;
+            engines.push({ id:"xyz", name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true })
+            
+            this.setState({ engines: engines });
+            console.log(res.data);
+        } catch(e) {
+            console.log(e.response);
+            console.log(Object.keys(e));
+        }
 
         // for sample
-        console.log("create new engine", type);
-        const engines = this.state.engines;
-        engines.push({id:"xyz",name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true})
-
-        this.setState({engines: engines});
     };
 
     async componentDidMount() {

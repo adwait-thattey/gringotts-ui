@@ -145,7 +145,7 @@ class Engine extends Component {
         const categoryName = document.getElementById('new-category-input').value.toLowerCase();
         const { engineName } = this.state;
         if (!categoryName) {
-            toast.error("No name given");
+            toast.error("Please provide category name");
             return
         }
         const currentCategories = [ ...this.state.categories ];
@@ -170,6 +170,7 @@ class Engine extends Component {
                 this.setState({ categories: currentCategories });
             } catch (e) {
                 console.log(Object.keys(e));
+                console.log(e.response)
             }
         }
     }

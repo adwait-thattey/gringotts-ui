@@ -29,11 +29,14 @@ class DashboardCategoryCard extends React.Component {
     }
     render() {
         let transformedEngineInfo = (eng) => {
-            const { url } = this.props.match;
+            let { url } = this.props.match;
 
+            if (url[url.length - 1] == '/'){
+                url = url.substring(0,url.length-1)
+            }
 //             const updatedUrl = url.substring(0, url.length - 1);
             const queryString = `${url}/${eng.type}/${eng.name}`
-            
+            console.log("querystring", queryString)
             return <table className="responsive-table dark">
                 <tbody>
                 <tr>

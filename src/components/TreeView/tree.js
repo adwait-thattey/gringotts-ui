@@ -143,9 +143,9 @@ export default function GmailTreeView(props) {
                   <NavLink to={`/dashboard/aws/${acc.name}`}>
                     <StyledTreeItem
                       nodeId={(Math.random() * 1000).toString()}
-                      labelText={category.name}
+                      labelText={category.roleName}
                       labelIcon={SupervisorAccountIcon}
-                      labelInfo={category.creds.length.toString()}
+                      labelInfo={category.generatedCreds.length.toString()}
                       color="#1a73e8"
                       bgColor="#e8f0fe"
                       key={index}
