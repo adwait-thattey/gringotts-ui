@@ -14,6 +14,7 @@ import ForumIcon from '@material-ui/icons/Forum';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 // import toolbar from '../../components/Nav/Toolbar/Toolbar';
+import { NavLink } from 'react-router-dom';
 
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
@@ -139,15 +140,17 @@ export default function GmailTreeView(props) {
             >
               {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
                 return (
-                  <StyledTreeItem
-                    nodeId={(Math.random() * 1000).toString()}
-                    labelText={category.name}
-                    labelIcon={SupervisorAccountIcon}
-                    labelInfo={category.creds.length.toString()}
-                    color="#1a73e8"
-                    bgColor="#e8f0fe"
-                    key={index}
-                  />
+                  <NavLink to={`/dashboard/aws/${acc.name}`}>
+                    <StyledTreeItem
+                      nodeId={(Math.random() * 1000).toString()}
+                      labelText={category.name}
+                      labelIcon={SupervisorAccountIcon}
+                      labelInfo={category.creds.length.toString()}
+                      color="#1a73e8"
+                      bgColor="#e8f0fe"
+                      key={index}
+                    />
+                  </NavLink>
                 )
               })}
             </StyledTreeItem>
@@ -170,15 +173,17 @@ export default function GmailTreeView(props) {
             >
               {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
                 return (
-                  <StyledTreeItem
-                    nodeId={(Math.random() * 1000).toString()}
-                    labelText={category.name}
-                    labelIcon={SupervisorAccountIcon}
-                    labelInfo={category.creds.length.toString()}
-                    color="#1a73e8"
-                    bgColor="#e8f0fe"
-                    key={index}
-                  />
+                  <NavLink to={`/dashboard/kv/${acc.name}`}>
+                    <StyledTreeItem
+                      nodeId={(Math.random() * 1000).toString()}
+                      labelText={category.name}
+                      labelIcon={SupervisorAccountIcon}
+                      labelInfo={category.creds.length.toString()}
+                      color="#1a73e8"
+                      bgColor="#e8f0fe"
+                      key={index}
+                    />
+                  </NavLink>
                 )
               })}
             </StyledTreeItem>

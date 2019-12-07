@@ -3,6 +3,7 @@ import CredCard from "../../components/KV/CredCard/CredCard";
 import M from 'materialize-css';
 import API from '../../utils/axios';
 import SideLayout from '../../hoc/sidelayout/sidelayout';
+import { toast } from 'react-toastify';
 
 class Engine extends Component {
     state = {
@@ -10,7 +11,8 @@ class Engine extends Component {
         revealCredModalInstance: null,
         createCredModalInstance: null,
         selectedCred: null,
-        selectedCategoryForAdding: null
+        selectedCategoryForAdding: null,
+        engineName: null
     };
 
     createCredential = category => {
@@ -52,11 +54,11 @@ class Engine extends Component {
         this.setState({ createCredModalInstance: createCredModal });
 
         const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
-        
+
         try {
             const res = await API.get(`/api/creds/${engineName}`, { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } });
             const updateObj = this.getUpdatedObj(res.data.userInfo.engines[0])
-            this.setState({ categories: updateObj })
+            this.setState({ categories: updateObj, engineName })
         } catch (e) {
             console.log(e);
         }
@@ -73,7 +75,7 @@ class Engine extends Component {
                 headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` }
             })
             return res.data.data;
-        } catch(e) {
+        } catch (e) {
             console.log(e.response);
         }
 
@@ -139,28 +141,36 @@ class Engine extends Component {
         }
     };
 
-    createCategory = () => {
-        const newCatName = document.getElementById('new-category-input').value.toLowerCase();
-        if (!newCatName) {
-            console.log("No name given");
+    createCategory = async () => {
+        const categoryName = document.getElementById('new-category-input').value.toLowerCase();
+        const { engineName } = this.state;
+        if (!categoryName) {
+            toast.error("No name given");
             return
         }
-        const currentCategories = this.state.categories;
-        const existingCategories = currentCategories.filter(cat => cat.name === newCatName);
+        const currentCategories = [ ...this.state.categories ];
+        const existingCategories = currentCategories.filter(cat => cat.name === categoryName);
         if (existingCategories.length > 0) {
-            console.log("Category Already Exists")
+            toast.error("Category already exists");
             return
         }
         else {
             const newCat = {
-                name: newCatName,
+                name: categoryName,
                 creds: []
             };
 
             // call API to create category
-            currentCategories.push(newCat);
-
-            this.setState({ categories: currentCategories });
+            try {
+                const res = await API.post(`api/creds/category/${engineName}`,
+                    { categoryName },
+                    { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
+                )
+                currentCategories.push(newCat);
+                this.setState({ categories: currentCategories });
+            } catch (e) {
+                console.log(Object.keys(e));
+            }
         }
     }
     render() {
@@ -195,7 +205,7 @@ class Engine extends Component {
                                         <label htmlFor="new-category-input">Create Category</label>
                                     </div>
                                     <div className="">
-                                        <a href="#!" onClick={this.createCategory} className="btn green darken-4">Create</a>
+                                        <button onClick={this.createCategory} className="btn green darken-4">Create</button>
                                     </div>
                                 </div>
                             </div>
