@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import CredCard from "../../components/KV/CredCard/CredCard";
 import Layout from '../../hoc/Layout/Layout';
+import SideLayout from '../../hoc/sidelayout/sidelayout';
+import CredCard from "../../components/KV/CredCard/CredCard";
 import AddCredModal from '../../components/KV/AddCredModal';
 import RevealCredModal from '../../components/KV/RevealCredModal';
-import M from 'materialize-css';
 import API from '../../utils/axios';
-import SideLayout from '../../hoc/sidelayout/sidelayout';
+import M from 'materialize-css';
+
 
 class Engine extends Component {
     state = {

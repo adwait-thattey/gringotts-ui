@@ -8,7 +8,7 @@ class RolesTable extends React.Component {
                 <tr key={index}>
                     <td className="role-cell" onClick={() => this.props.roleClicked(role)}>
                         <a href="JavaScript:void(0)" className="role-cell-link">
-                            <span className="role-cell__key">{role.name}</span>
+                            <span className="role-cell__key">{role.roleName}</span> 
                         </a>
                     </td>
                 </tr>

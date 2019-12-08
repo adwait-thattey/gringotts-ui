@@ -38,6 +38,7 @@ class SideLayout extends Component {
                         sub: element.roles || []
                     })
                     break;
+                default:
             }
         }
         return {

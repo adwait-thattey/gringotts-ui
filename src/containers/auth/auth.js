@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import './auth.css';
+import Layout from '../../hoc/Layout/Layout';
 import Login from '../../components/auth/login';
 import Register from '../../components/auth/register';
-import Layout from '../../hoc/Layout/Layout';
-import axios from 'axios';
 import Webcam from 'react-webcam'
 import API from '../../utils/axios';
 import M from 'materialize-css';
+import './auth.css';
+import axios from 'axios';
+
 
 const videoConstraints = {
     width: 1280,
@@ -71,7 +72,7 @@ class Auth extends Component {
 			email: this.state.authFields.email,
 			password: this.state.authFields.password
 		}
-		API.post('api/auth/register', user, {headers: {"Content-Type": "application/json" }})
+		axios.post('http://10.0.54.43:8000/api/auth/register', user, {headers: {"Content-Type": "application/json" }})
 			.then(response => {
 				console.log(response.data);
 			})
@@ -86,10 +87,10 @@ class Auth extends Component {
 			email: this.state.authFields.email,
 			password: this.state.authFields.password
 		}
-		API.post('api/auth/login', user, {headers: {"Content-Type": "application/json" }})
+		axios.post('http://10.0.54.43:8000/api/auth/login', user)
 			.then(response => {
 				localStorage.setItem('AUTH_TOKEN', response.data);
-				console.log(response.data);
+				console.log(response);
 			})
 			.catch(error => {
 				console.log(error.message);

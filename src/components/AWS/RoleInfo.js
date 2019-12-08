@@ -2,17 +2,23 @@ import React from 'react';
 
 class RoleInfo extends React.Component {
     state={}
-
+ 
     render(){
-        const generatedCreds = this.props.role.generatedCreds.map((cred, index) => {
-            return (
-                <div key={index}>
-                    <p>Access_key : " {cred.access_key} "</p><br/>
-                    <p>Secret_key : " {cred.secret_key} "</p><br/>
-                    <p>lease_duration :  {cred.lease_duration}  </p><br/>
-                </div>
-            )
-        });
+        let generatedCreds = null;
+        if(this.props.role.generatedCreds.length === 0){
+            generatedCreds = <p>No Credentials.</p>
+        }
+        else{
+            generatedCreds = this.props.role.generatedCreds.map((cred, index) => {
+                return (
+                    <div key={index}>
+                        <p>Access key : " {cred.accessKey} "</p><br/>
+                        <p>Generated On : " {cred.generatedOn} "</p><br/>
+                        <p>Expires On :  {cred.expiresOn}  </p><br/>
+                    </div>
+                )
+            });
+        }
 
         return(
             <React.Fragment>
@@ -25,7 +31,7 @@ class RoleInfo extends React.Component {
                                         <div className="">
                                             <div className="card-content">
                                                 <span className="card-title cyan-text text-darken-4">
-                                                    <b>Credentials ( {this.props.role.name} )</b> 
+                                                    <b>Credentials ( {this.props.role.roleName} )</b> 
                                                 </span>
                                                 <div className="divider cred-card-divider" />
                                                 <div className="role-credentials">

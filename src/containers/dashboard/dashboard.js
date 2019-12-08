@@ -1,30 +1,15 @@
 import React, { Component } from 'react';
-import credentialsImage from '../../images/components/cards/Credentials.jpeg';
-import dynmCreds from '../../images/components/cards/DynmCreds.png';
-import sshImage from '../../images/components/cards/ssh.png';
-import gpgImage from '../../images/components/cards/GPG.png';
 import Layout from '../../hoc/Layout/Layout';
 import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
 import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
 import API from '../../utils/axios';
-const dummyEngines = [
-    {
-        id: 1,
-        name: 'kv1',
-        type: 'kv',
-        createdOn: new Date('5 Dec 2019').toDateString(),
-        health: true,
-        credCount: 4},
-    {
-        id: 2,
-        name: 'aws1',
-        type: 'aws',
-        createdOn: new Date('6 Dec 2019').toDateString(),
-        health: true,
-        credCount: 5
-    },
-]
+import credentialsImage from '../../images/components/cards/Credentials.jpeg';
+import dynmCreds from '../../images/components/cards/DynmCreds.png';
+import sshImage from '../../images/components/cards/ssh.png';
+import gpgImage from '../../images/components/cards/GPG.png';
+import axios from 'axios';
+
 class Dashboard extends Component {
     state = {
         cards: {
@@ -82,7 +67,7 @@ class Dashboard extends Component {
             },
 
         ],
-        engines: dummyEngines,
+        engines: [],
         token: localStorage.getItem("AUTH_TOKEN")
     };
 
@@ -90,20 +75,16 @@ class Dashboard extends Component {
         // call API to create engine
 
         // for sample
-        console.log("create new engine", type);
-        const engines = this.state.engines;
-    
-        engines.push({
-            id:"xyz",
-            name:"New Engine",
-            type: type, 
-            roles: [],
-            createdOn:"sample date", 
-            health:true,
-            status: 0,            
-        })
-
-        this.setState({engines: engines});
+        axios.post('http://10.0.54.43:8000/api/engine/aws')
+            .then(res => {
+                console.log(res.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        // console.log("create new engine", type);
+        // const engines = this.state.engines;
+        // engines.push({id:"xyz",name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true})
     };
 
     async componentDidMount() {

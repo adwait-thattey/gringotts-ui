@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import SideLayout from '../../hoc/sidelayout/sidelayout';
 import Layout from '../../hoc/Layout/Layout';
-import ConfigModal from '../../components/AWS/ConfigModal';
+import SideLayout from '../../hoc/sidelayout/sidelayout';
 import ConfigMessage from '../../components/AWS/ConfigMessage';
+import ConfigModal from '../../components/AWS/ConfigModal';
 import RolesCard from '../../components/AWS/RolesCard';
 import RoleInfo from '../../components/AWS/RoleInfo';
+// import API from '../../utils/axios';
 import M from 'materialize-css';
 import './style.css'
-import API from '../../utils/axios';
+import axios from '../../utils/axios';
 
 class AWS extends Component {
     state = {  
@@ -16,12 +17,10 @@ class AWS extends Component {
 			roleName: '',
 		},
         configModalInstance: null,
-        revealCredModalInstance: null,
         selectedRole: "",
         engineName: null,
         roles: [],
         status: 1,
-        
     }
 
     async componentDidMount() {
@@ -31,21 +30,17 @@ class AWS extends Component {
             outDuration: 500
         };
 
-        let revealCredModal = document.getElementById('credModal');
-        revealCredModal = M.Modal.init(revealCredModal, modalOptions);
-        this.setState({ revealCredModalInstance: revealCredModal });
-
         let configAWSEngineModal = document.getElementById('configModal');
         configAWSEngineModal = M.Modal.init(configAWSEngineModal, modalOptions);
         this.setState({ configModalInstance: configAWSEngineModal, 
                         engineName : this.getEngineNameFromUrl(this.props.location.pathname)  });
-
+ 
         try {
-            const res = await API.get('api/engine', { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } }); 
+            const res = await axios.get('http://10.0.54.43:8000/api/engine', { headers: { "auth-token": `Bearer ${localStorage.getItem('AUTH_TOKEN')}` } }); 
             const engName = this.getEngineNameFromUrl(this.props.location.pathname);
-            const desiredEngine = res.data.filter(eng => (eng.name === engName && eng.type === 'aws'));
-            this.setState({roles: desiredEngine.categories, status: desiredEngine.flag, engineName: engName})
-            console.log(res.data);
+            const desiredEngine = res.data.filter(eng => (eng.name === engName && eng.type === 'aws'))[0];
+            this.setState({roles: desiredEngine.categories, status: desiredEngine.status, engineName: desiredEngine.name})
+            // console.log(this.state.roles);
         } catch(e) {
             console.log(e);
         }
@@ -76,7 +71,7 @@ class AWS extends Component {
     }
 
     roleClickedHandler = (role) => {
-        this.setState({ selectedRole: role.name});
+        this.setState({ selectedRole: role.roleName});
     };
 
     configureAWSEngine = async () => {
@@ -86,7 +81,7 @@ class AWS extends Component {
         this.setState({ status: 1})
 
         try {
-            const res = await API.post(`/api/dynamic/aws/${this.getEngineNameFromUrl(this.props.location.pathname)}/config`, {
+            const res = await axios.post(`http://10.0.54.43:8000/api/dynamic/aws/${this.getEngineNameFromUrl(this.props.location.pathname)}/config`, {
                 "accessKey": newAccessKey,
                 "secretKey": newSecretKey,
                 "accountName": newAccountName
@@ -108,69 +103,70 @@ class AWS extends Component {
             return
         }
         const currentRoles = this.state.roles;
-        const existingRoles = currentRoles.filter(role => role.name === newRoleName);
+        const existingRoles = currentRoles.filter(role => role.roleName === newRoleName);
         if (existingRoles.length > 0) {
             console.log("Role Already Exists")
             return
         }
         else {
             const newRole = {
-                name: newRoleName,
+                roleName: newRoleName,
                 generatedCreds: []
             }
             currentRoles.push(newRole);
             this.setState({ roles: currentRoles, formFields: { selectedInstance: 'EC2', roleName: ''} });
             // call API to create role
-            try {
-                const res = await API.post(`/api/dynamic/aws/${this.getEngineNameFromUrl(this.props.location.pathname)}/add_new_role`,
-                            {
-                                "roleName": newRoleName, 
-                                "PolicyName": selectedInstance
-                            }, 
-                            { 
-                                headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } 
-                            })
-                this.setState({ status: 2});
-                console.log(res.data);
+            
+            axios.post(`http://10.0.54.43:8000/api/dynamic/aws/${this.getEngineNameFromUrl(this.props.location.pathname)}/add_new_role`,
+                    {
+                        "roleName": newRoleName, 
+                        "PolicyName": selectedInstance
+                    }, 
+                    { 
+                        headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } 
+                    })
+                .then(res => {
+                    console.log(res.data);
+                    this.setState({ status: 2});
 
-            } catch (e) {
+                })
+                .catch (e =>  {
                 console.log(e);
-            }
+                })
         }
     }
 
     generateTheSecret = () =>{
 
         const allRoles = this.state.roles;
-        const reqRole = this.state.roles.filter(role => role.name === this.state.selectedRole)[0];
-        const reqRoleIndex = allRoles.indexOf(reqRole)
-        allRoles[reqRoleIndex].generatedCreds.push({
-             access_key: "AKIAJELUDIANQGRXCTZQ", 
-             secret_key: "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", 
-             lease_duration: "768h", 
+        const reqRole = this.state.roles.filter(role => role.roleName === this.state.selectedRole)[0];
+        const roleName = reqRole.roleName; 
+        const engineName = this.state.engineName;
+        const reqRoleIndex = allRoles.indexOf(reqRole)        
+
+        
+        axios.get(`http://10.0.54.43:8000/api/dynamic/aws/${engineName}/${roleName}/user`, { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } })               
+            .then(res => {
+                console.log(res.data)
+                allRoles[reqRoleIndex].generatedCreds.push({
+                    accessKey: res.data.accessKey, 
+                    generatedOn: res.data.generatedOn, 
+                    expiresOn: res.data.expiresOn, 
+                })
+                this.setState({ roles: allRoles });
             })
-        console.log(allRoles);
-        this.setState({ categories: allRoles })
-
-        try{
-            const res = API.get(`/api/dynamic/aws/${this.getEngineNameFromUrl(this.props.location.pathname)}/${reqRole.name}/user`, {
-
-            }, { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } } )
-            console.log(res.data);
-
-        }catch (e) {
-            console.log(e)
-        }
+            .catch(e => {
+                console.log(e);
+            })
     }
-    
-    
+       
     render() { 
         let content = null; let roleInfo = null;
         if(this.state.selectedRole){ 
             roleInfo = (
                 <RoleInfo 
-                    role={this.state.roles.filter(r => r.name === this.state.selectedRole)[0]}
-                    genCreds    ={this.generateTheSecret}
+                    role={this.state.roles.filter(r => r.roleName === this.state.selectedRole)[0]}
+                    genCreds={this.generateTheSecret}
                 />
             )
         }
