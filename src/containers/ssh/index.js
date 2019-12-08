@@ -6,6 +6,7 @@ import SideLayout from '../../hoc/sidelayout/sidelayout';
 import { toast } from 'react-toastify';
 import classes from './style.module.css';
 import DateString from '../../utils/date';
+import { download } from 'downloadjs';
 
 class SSH extends Component {
 
@@ -22,7 +23,9 @@ class SSH extends Component {
         key: {
             keyName: null,
             keyPassword: null,
-        }
+        },
+        // Using this variable to show download key option
+        receivedCreds: false
     }
 
     getRequiredEngine = (engineList, engName) => {
@@ -41,6 +44,7 @@ class SSH extends Component {
         const mySSHEngine = this.getRequiredEngine(res.data, engineName);
 
         this.setState({ info: mySSHEngine, engineName });
+        
     }
 
     handleChange = (e) => {
@@ -105,7 +109,7 @@ class SSH extends Component {
     getGenCreds = (_id) => {
         const { info } = this.state;
         const data = info.roles.find(role => role._id === _id);
-        this.setState({ selectedMachine: data });
+        this.setState({ selectedMachine: data, receivedCreds: false });
     }
 
     configureCA = async () => {
@@ -150,22 +154,27 @@ class SSH extends Component {
         }
 
         try {
-            const res = await API.post (
+            const res = await API.post(
                 `api/ssh/${this.state.engineName}/generate_key`,
                 dataObj,
                 { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
             );
             toast.success("Keys successfully generated")
-        } catch(e) {
+            this.setState({ receivedCreds: true });
+        } catch (e) {
             toast.error("Some error occured")
             console.log(e);
         }
     }
 
+    download = async (fileName) => {
+        const response = await API.get("localhost:8000/brij6.cer");
+        console.log(response);
+    }
+
     render() {
 
-        const { info, selectedMachine } = this.state;
-
+        const { info, selectedMachine, receivedCreds, key } = this.state;
 
         return (
             <SideLayout>
@@ -203,7 +212,7 @@ class SSH extends Component {
                                                 <div>
                                                     <p>
                                                         You have successfully configured the ssh engine
-                                                </p>
+                                                    </p>
                                                 </div>
                                             </div>
                                         )}
@@ -308,6 +317,16 @@ class SSH extends Component {
                                     </div>
                                 </div>
                             </div>
+                            {receivedCreds && (
+                                <div className="row">
+                                    <div>
+                                        <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}`} download={`${key.keyName}.txt`} target="_blank">Private Key</a>
+                                    </div>
+                                    <div>
+                                        <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}.cer`} download={`${key.keyName}.cer`} target="_blank">Certificate Key</a>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                 </section>

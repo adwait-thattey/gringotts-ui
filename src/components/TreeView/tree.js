@@ -126,7 +126,7 @@ export default function GmailTreeView(props) {
     >
 
       {/* Rendering The AWS Credential List */}
-      <StyledTreeItem nodeId="1" labelText="AWS" labelIcon={Label} >
+      <StyledTreeItem nodeId="1" labelText="AWS" labelIcon={Label}>
         {aws && aws.length > 0 && (
           aws.map((acc, index) => (
             <StyledTreeItem
