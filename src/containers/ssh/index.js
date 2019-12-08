@@ -18,6 +18,10 @@ class SSH extends Component {
             hostUsername: '',
             hostDomain: '',
             ttl: null
+        },
+        key: {
+            keyName: null,
+            keyPassword: null,
         }
     }
 
@@ -53,6 +57,17 @@ class SSH extends Component {
         this.setState({ newMachineForm: updateMachineForm });
     }
 
+    handleChange2 = (e) => {
+        const target = e.target.name;
+        const value = e.target.value;
+
+        const updateKey = { ...this.state.key };
+        updateKey[target] = value;
+
+        this.setState({ key: updateKey });
+    }
+
+
     addNewMachine = async () => {
         const { ttl, hostDomain, hostIP, hostUsername } = this.state.newMachineForm;
 
@@ -62,7 +77,7 @@ class SSH extends Component {
         }
 
         const info = { ...this.state.info };
-        const infoRoles = [ ...info.roles ];
+        const infoRoles = [...info.roles];
         infoRoles.push({
             machine_ip: hostIP,
             machine_username: hostUsername,
@@ -73,7 +88,7 @@ class SSH extends Component {
 
         try {
             const res = await API.post(
-                `api/ssh/${this.state.engineName}/machines`, 
+                `api/ssh/${this.state.engineName}/machines`,
                 this.state.newMachineForm,
                 { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
             );
@@ -82,7 +97,7 @@ class SSH extends Component {
             this.setState({ info })
 
             toast.success("Machine successfully added");
-        } catch(e) {
+        } catch (e) {
             toast.error("Some error occured");
         }
     }
@@ -102,7 +117,7 @@ class SSH extends Component {
             const updatedInfo = { ...this.state.info };
             updatedInfo.status = 1;
             this.setState({ info: updatedInfo });
-        } catch(e) {
+        } catch (e) {
             toast.error("Some error occured");
         }
     }
@@ -115,10 +130,42 @@ class SSH extends Component {
         console.log(res.data.CAPublicKey);
     }
 
+    genKey = async () => {
+        const { verboseName } = this.state.selectedMachine;
+        const { keyName, keyPassword } = this.state.key;
+
+        if (!verboseName) {
+            toast.error("Machine not selected");
+            return;
+        }
+
+        if (!keyName || !keyPassword) {
+            toast.error("Key Name or Key Password not set");
+            return;
+        }
+
+        const dataObj = {
+            ...this.state.key,
+            role: verboseName
+        }
+
+        try {
+            const res = await API.post (
+                `api/ssh/${this.state.engineName}/generate_key`,
+                dataObj,
+                { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
+            );
+            toast.success("Keys successfully generated")
+        } catch(e) {
+            toast.error("Some error occured")
+            console.log(e);
+        }
+    }
+
     render() {
 
         const { info, selectedMachine } = this.state;
-        console.log(info)
+
 
         return (
             <SideLayout>
@@ -152,22 +199,22 @@ class SSH extends Component {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className={classes.configBtn}>
-                                            <div>
-                                                <p>
-                                                    You have successfully configured the ssh engine
+                                            <div className={classes.configBtn}>
+                                                <div>
+                                                    <p>
+                                                        You have successfully configured the ssh engine
                                                 </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
                                 </div>
-                                    {info.status === 1 && (
-                                        <div className={classes.configBtn}>
-                                            <div>
-                                                <button onClick={this.getCAKey} className="waves-effect waves-light btn-large">Get Key</button>
-                                            </div>
+                                {info.status === 1 && (
+                                    <div className={classes.configBtn}>
+                                        <div>
+                                            <button onClick={this.getCAKey} className="waves-effect waves-light btn-large">Get Key</button>
                                         </div>
-                                    )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -231,15 +278,15 @@ class SSH extends Component {
                                 <table className="striped responsive-table">
                                     <thead>
                                         <tr>
-                                            <th>Public Key</th>
+                                            <th>Serial Number</th>
                                             <th>Generated On</th>
                                             <th>Expired?</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        {selectedMachine.generated_keys.map(key => (
-                                            <tr>
+                                        {selectedMachine.generated_keys.map((key, index) => (
+                                            <tr key={index}>
                                                 <th>{key.serialNumber}</th>
                                                 <th>{DateString(key.generated_on)}</th>
                                                 <th>{key.isExpired}</th>
@@ -247,6 +294,19 @@ class SSH extends Component {
                                         ))}
                                     </tbody>
                                 </table>
+                            </div>
+                            <div className="row">
+                                <div className={`${classes.inputField2}`} style={{ height: '100%' }}>
+                                    <div className="input-field col s12 l4">
+                                        <input onChange={(e) => this.handleChange2(e)} name="keyName" id="username" type="text" className="validate" placeholder="Key Name" />
+                                    </div>
+                                    <div className="input-field col s12 l4">
+                                        <input onChange={(e) => this.handleChange2(e)} name="keyPassword" id="domain_name" type="text" className="validate" placeholder="Key Password" />
+                                    </div>
+                                    <div className={`${classes.addMachineBtn} col s12 l4`}>
+                                        <button onClick={this.genKey} className="waves-effect waves-light btn">Generate Key</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
