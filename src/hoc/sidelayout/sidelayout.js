@@ -22,7 +22,8 @@ class SideLayout extends Component {
 
     formatData = (list) => {
         const kv = [];
-        const aws = []
+        const aws = [];
+        const ssh = [];
         for (let element of list) {
             switch (element.type) {
                 case 'kv':
@@ -38,11 +39,18 @@ class SideLayout extends Component {
                         sub: element.roles || []
                     })
                     break;
+
+                case 'ssh':
+                    ssh.push({
+                        name: element.name,
+                        sub: element.roles || []
+                    })
             }
         }
         return {
             aws,
-            kv
+            kv,
+            ssh
         }
     }
 

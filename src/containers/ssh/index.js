@@ -44,7 +44,7 @@ class SSH extends Component {
         const mySSHEngine = this.getRequiredEngine(res.data, engineName);
 
         this.setState({ info: mySSHEngine, engineName });
-        
+
     }
 
     handleChange = (e) => {
@@ -120,6 +120,7 @@ class SSH extends Component {
             )
             const updatedInfo = { ...this.state.info };
             updatedInfo.status = 1;
+            toast.success("Successfully Configured Certificate Authority");
             this.setState({ info: updatedInfo });
         } catch (e) {
             toast.error("Some error occured");
@@ -282,7 +283,7 @@ class SSH extends Component {
 
                     {selectedMachine && (
                         <div className={classes.CAConfig}>
-                            <h2 className={classes.addMachineHeading}>Generated Keys</h2>
+                            <h2 style={{ paddingLeft: "1rem", paddingTop: "1rem" }} className={`${classes.addMachineHeading} cyan-text text-darken-4 title page-title`}>Credentials Generated</h2>
                             <div className={classes.listTable}>
                                 <table className="striped responsive-table">
                                     <thead>
@@ -318,12 +319,14 @@ class SSH extends Component {
                                 </div>
                             </div>
                             {receivedCreds && (
-                                <div className="row">
-                                    <div>
-                                        <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}`} download={`${key.keyName}.txt`} target="_blank">Private Key</a>
-                                    </div>
-                                    <div>
-                                        <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}.cer`} download={`${key.keyName}.cer`} target="_blank">Certificate Key</a>
+                                <div className={classes.downloadBox}>
+                                    <div className="row">
+                                        <div className="col l3">
+                                            <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}`} download={`${key.keyName}.txt`} target="_blank">Private Key</a>
+                                        </div>
+                                        <div className="col l3">
+                                            <a className="waves-effect waves-light btn" href={`http://127.0.0.1:8000/${key.keyName}.cer`} download={`${key.keyName}.cer`} target="_blank">Certificate Key</a>
+                                        </div>
                                     </div>
                                 </div>
                             )}

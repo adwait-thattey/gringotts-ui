@@ -114,8 +114,8 @@ const useStyles = makeStyles({
 export default function GmailTreeView(props) {
   const classes = useStyles();
 
-  const { aws, kv } = props.tree;
-
+  const { aws, kv, ssh } = props.tree;
+  console.log(ssh);
   return (
     <TreeView
       className={classes.root}
@@ -179,6 +179,39 @@ export default function GmailTreeView(props) {
                       labelText={category.name}
                       labelIcon={SupervisorAccountIcon}
                       labelInfo={category.creds.length.toString()}
+                      color="#1a73e8"
+                      bgColor="#e8f0fe"
+                      key={index}
+                    />
+                  </NavLink>
+                )
+              })}
+            </StyledTreeItem>
+          ))
+        )}
+
+      </StyledTreeItem>
+
+      <StyledTreeItem nodeId="1" labelText="SSH" labelIcon={Label}>
+        {ssh && ssh.length > 0 && (
+          ssh.map((acc, index) => (
+            <StyledTreeItem
+              nodeId={(Math.random() * 100).toString()}
+              labelText={acc.name}
+              labelIcon={SupervisorAccountIcon}
+              labelInfo="90"
+              color="#1a73e8"
+              bgColor="#e8f0fe"
+              key={index}
+            >
+              {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
+                return (
+                  <NavLink to={`/dashboard/ssh/${acc.name}`}>
+                    <StyledTreeItem
+                      nodeId={(Math.random() * 1000).toString()}
+                      labelText={category.verboseName}
+                      labelIcon={SupervisorAccountIcon}
+                      labelInfo={category.generated_keys.length.toString()}
                       color="#1a73e8"
                       bgColor="#e8f0fe"
                       key={index}

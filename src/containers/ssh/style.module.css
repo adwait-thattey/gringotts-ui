@@ -60,3 +60,7 @@ tr:hover {
 ::placeholder{
     color: #006064;
 }
+
+.downloadBox {
+    padding: 20px;
+}
