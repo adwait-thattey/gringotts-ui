@@ -81,7 +81,7 @@ class Dashboard extends Component {
                 { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } },
             );  
             const engines = this.state.engines;
-            engines.push({ id:"xyz", name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true })
+            window.location.reload();
             
             this.setState({ engines: engines });
             console.log(res.data);

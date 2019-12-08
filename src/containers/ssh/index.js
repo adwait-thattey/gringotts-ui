@@ -116,12 +116,11 @@ class SSH extends Component {
         try {
             const res = await API.post(
                 `api/ssh/${this.state.engineName}/ca`,
+                {},
                 { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
             )
-            const updatedInfo = { ...this.state.info };
-            updatedInfo.status = 1;
+            window.location.reload()
             toast.success("Successfully Configured Certificate Authority");
-            this.setState({ info: updatedInfo });
         } catch (e) {
             toast.error("Some error occured");
         }
@@ -192,7 +191,7 @@ class SSH extends Component {
                                         </div>
                                     ) : (
                                             <div className={classes.configText}>
-                                                <button onClick={this.configureCA} className="circle waves-effect waves-light btn-large">
+                                                <button className="circle waves-effect waves-light btn-large">
                                                     <i className="material-icons">check</i>
                                                 </button>
                                             </div>

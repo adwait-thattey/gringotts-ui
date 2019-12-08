@@ -39,12 +39,24 @@ class Auth extends Component {
 		this.setState({ camera: updatedCamera });
 	}
 
-	capture = () => {
+	capture = async () => {
 		const imageSrc = this.state.camera.webcam.getScreenshot();
+		const { email } = this.state.authFields;
 
 		const updatedCamera = { ...this.state.camera };
 		updatedCamera.imageData = imageSrc;
 		this.setState({ camera: updatedCamera });
+
+		if (!email) {
+			toast.error("Email field required");
+			return;
+		}
+		console.log(typeof imageSrc);
+		const response = await axios.post(
+			"http://10.0.54.163:7000/face/auth",
+			{ image: imageSrc, email }
+		)
+		console.log(response);
 	}
 
 	fieldChangeHandler = (event, id) => {
