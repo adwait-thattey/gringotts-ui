@@ -12,7 +12,13 @@ class SSH extends Component {
     state = {
         info: null,
         selectedMachine: null,
-        engineName: null
+        engineName: null,
+        newMachineForm: {
+            hostIP: '',
+            hostUsername: '',
+            hostDomain: '',
+            ttl: null
+        }
     }
 
     getRequiredEngine = (engineList, engName) => {
@@ -33,44 +39,51 @@ class SSH extends Component {
         this.setState({ info: mySSHEngine, engineName });
     }
 
-    getData = () => {
-        return {
-            _id: "1234567890",
-            engineType: "ssh",
-            engineName: "eng1",
-            status: 0,
+    handleChange = (e) => {
+        const target = e.target.name;
+        const value = e.target.value;
 
-            roles: [
-                {
-                    _id: "$1234567890",
-                    verboseName: "role1",
-                    remote_machine_ip: "192.168.0.1",
-                    remote_machine_username: "brijesh",
-                    remote_machine_domain: "https://kuckduckoo.com",
-                    ttl: "some-ttl",
+        const updateMachineForm = { ...this.state.newMachineForm };
+        updateMachineForm[target] = value;
 
-                    generated_keys: [
-                        {
-                            _id: "$$1234567890",
-                            generated_on: new Date().toString(),
-                            public_key: "public key",
-                            serialNumber: "263846137613"
-                        },
-                        {
-                            _id: "$$1234567098",
-                            generated_on: new Date().toString(),
-                            public_key: "public key 2",
-                            serialNumber: "126891891356"
-                        },
-                        {
-                            _id: "$$1234567811",
-                            generated_on: new Date().toString(),
-                            public_key: "public key 3",
-                            serialNumber: "648916516511"
-                        }
-                    ]
-                }
-            ]
+        if (target === "ttl") {
+            updateMachineForm[target] = `${value}m0s`;
+        }
+
+        this.setState({ newMachineForm: updateMachineForm });
+    }
+
+    addNewMachine = async () => {
+        const { ttl, hostDomain, hostIP, hostUsername } = this.state.newMachineForm;
+
+        if (!hostDomain || !hostIP || !hostUsername || !ttl) {
+            toast.error("Some details are not filled");
+            return;
+        }
+
+        const info = { ...this.state.info };
+        const infoRoles = [ ...info.roles ];
+        infoRoles.push({
+            machine_ip: hostIP,
+            machine_username: hostUsername,
+            machine_domain: hostDomain
+        })
+
+        info.roles = infoRoles;
+
+        try {
+            const res = await API.post(
+                `api/ssh/${this.state.engineName}/machines`, 
+                this.state.newMachineForm,
+                { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
+            );
+
+
+            this.setState({ info })
+
+            toast.success("Machine successfully added");
+        } catch(e) {
+            toast.error("Some error occured");
         }
     }
 
@@ -80,10 +93,18 @@ class SSH extends Component {
         this.setState({ selectedMachine: data });
     }
 
-    configureCA = () => {
-        const updatedInfo = { ...this.state.info };
-        updatedInfo.status = 1;
-        this.setState({ info: updatedInfo });
+    configureCA = async () => {
+        try {
+            const res = await API.post(
+                `api/ssh/${this.state.engineName}/ca`,
+                { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
+            )
+            const updatedInfo = { ...this.state.info };
+            updatedInfo.status = 1;
+            this.setState({ info: updatedInfo });
+        } catch(e) {
+            toast.error("Some error occured");
+        }
     }
 
     getCAKey = async () => {
@@ -156,20 +177,20 @@ class SSH extends Component {
                         <div className="divider cred-card-divider" />
                         <div className="row">
                             <div className={`${classes.inputField}`} style={{ height: '100%' }}>
-                                <div className="input-field col s12 l4">
-                                    <input id="ip_address" type="text" className="validate" placeholder="IP Addreess" />
-                                    {/* <label style={{ paddingBottom: "20px" }} htmlFor="ip_address">IP address</label> */}
+                                <div className="input-field col s12 l3">
+                                    <input onChange={(e) => this.handleChange(e)} name="hostIP" id="ip_address" type="text" className="validate" placeholder="IP Addreess" />
                                 </div>
                                 <div className="input-field col s12 l3">
-                                    <input id="username" type="text" className="validate" placeholder="Username" />
-                                    {/* <label style={{ fontSize: "20px", paddingBottom: "20px" }} htmlFor="username">Username</label> */}
+                                    <input onChange={(e) => this.handleChange(e)} name="hostUsername" id="username" type="text" className="validate" placeholder="Username" />
                                 </div>
                                 <div className="input-field col s12 l3">
-                                    <input id="domain_name" type="text" className="validate" placeholder="Domain Name" />
-                                    {/* <label style={{ fontSize: "20px" }} htmlFor="domain_name">Domain</label> */}
+                                    <input onChange={(e) => this.handleChange(e)} name="hostDomain" id="domain_name" type="text" className="validate" placeholder="Domain Name" />
                                 </div>
-                                <div className={classes.addMachineBtn}>
-                                    <button className="waves-effect waves-light btn">Add Machine</button>
+                                <div className="input-field col s12 l2">
+                                    <input onChange={(e) => this.handleChange(e)} name="ttl" id="ttl" type="text" className="validate" placeholder="Time to live (mins)" />
+                                </div>
+                                <div className={`${classes.addMachineBtn} col s12 l1`}>
+                                    <button onClick={this.addNewMachine} className="waves-effect waves-light btn">Add Machine</button>
                                 </div>
                             </div>
                         </div>
