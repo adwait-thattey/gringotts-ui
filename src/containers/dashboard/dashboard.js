@@ -108,7 +108,7 @@ class Dashboard extends Component {
 
     async componentDidMount() {
         try {
-            const res = await API.get('/api/engine', { headers: { "auth-token": `Bearer ${this.state.token}` } }) 
+            const res = await API.get('api/engine/', { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }) 
             this.setState({ engines: this.getRequiredInfo(res.data) });
             console.log(res.data)
         } catch(e) {

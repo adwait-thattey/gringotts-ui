@@ -59,9 +59,11 @@ const useTreeItemStyles = makeStyles(theme => ({
   },
 }));
 
+
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
+  const { tree, labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
+
 
   return (
     <TreeItem
@@ -108,127 +110,81 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GmailTreeView() {
+export default function GmailTreeView(props) {
   const classes = useStyles();
+
+  const { aws, kv } = props.tree;
 
   return (
     <TreeView
       className={classes.root}
-      defaultExpanded={['1','6']}
+      defaultExpanded={['1', '6']}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultEndIcon={<div style={{ width: 24 }} />}
     >
-      <StyledTreeItem nodeId="1" labelText="SSH" labelIcon={Label} >
-      <StyledTreeItem
-          nodeId="5"
-          labelText="Users"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        />
-        
-        <StyledTreeItem
-          nodeId="13"
-          labelText="Categories"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        />
-        <StyledTreeItem
-          nodeId="6"
-          labelText="Engines"
-          labelIcon={ForumIcon}
-          labelInfo="3,566"
-          color="#a250f5"
-          bgColor="#f3e8fd"
-        >
-              <StyledTreeItem
-                nodeId="11"
-                labelText="eng1"
-                labelIcon={SupervisorAccountIcon}
-                labelInfo="90"
-                color="#1a73e8"
-                bgColor="#e8f0fe"
-              />
-              
-              <StyledTreeItem
-                nodeId="12"
-                labelText="eng2"
-                labelIcon={ForumIcon}
-                labelInfo="3,566"
-                color="#a250f5"
-                bgColor="#f3e8fd"
-              />
-              
-              
+
+      {/* Rendering The AWS Credential List */}
+      <StyledTreeItem nodeId="1" labelText="AWS" labelIcon={Label} >
+        {aws && aws.length > 0 && (
+          aws.map((acc, index) => (
+            <StyledTreeItem
+              nodeId={(Math.random() * 100).toString()}
+              labelText={acc.name}
+              labelIcon={SupervisorAccountIcon}
+              labelInfo="90"
+              color="#1a73e8"
+              bgColor="#e8f0fe"
+              key={index}
+            >
+              {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
+                return (
+                  <StyledTreeItem
+                    nodeId={(Math.random() * 1000).toString()}
+                    labelText={category.name}
+                    labelIcon={SupervisorAccountIcon}
+                    labelInfo={category.creds.length.toString()}
+                    color="#1a73e8"
+                    bgColor="#e8f0fe"
+                    key={index}
+                  />
+                )
+              })}
             </StyledTreeItem>
-        
+          ))
+        )}
+
       </StyledTreeItem>
-      <StyledTreeItem nodeId="2" labelText="Dynamic Credentials" labelIcon={Label} >
-      <StyledTreeItem
-          nodeId="7"
-          labelText="Users"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        />
-        
-        <StyledTreeItem
-          nodeId="8"
-          labelText="Engines"
-          labelIcon={ForumIcon}
-          labelInfo="3,566"
-          color="#a250f5"
-          bgColor="#f3e8fd"
-        />
-        
-      </StyledTreeItem>
-      
-      
-      <StyledTreeItem nodeId="3" labelText="Credential Manager" labelIcon={Label}>
-        <StyledTreeItem
-          nodeId="9"
-          labelText="Users"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        />
-        
-        <StyledTreeItem
-          nodeId="10"
-          labelText="Engines"
-          labelIcon={ForumIcon}
-          labelInfo="3,566"
-          color="#a250f5"
-          bgColor="#f3e8fd"
-        />
-        
-      </StyledTreeItem>
-      
-      <StyledTreeItem nodeId="4" labelText="Secured transfer of data (GPG)" labelIcon={Label} >
-      <StyledTreeItem
-          nodeId="5"
-          labelText="Users"
-          labelIcon={SupervisorAccountIcon}
-          labelInfo="90"
-          color="#1a73e8"
-          bgColor="#e8f0fe"
-        />
-        
-        <StyledTreeItem
-          nodeId="6"
-          labelText="Engines"
-          labelIcon={ForumIcon}
-          labelInfo="3,566"
-          color="#a250f5"
-          bgColor="#f3e8fd"
-        />
-        
+
+
+      <StyledTreeItem nodeId="2" labelText="Credentials" labelIcon={Label} >
+        {kv && kv.length > 0 && (
+          kv.map((acc, index) => (
+            <StyledTreeItem
+              nodeId={(Math.random() * 100).toString()}
+              labelText={acc.name}
+              labelIcon={SupervisorAccountIcon}
+              color="#1a73e8"
+              bgColor="#e8f0fe"
+              key={index}
+            >
+              {acc.sub.length === 0 ? null : acc.sub.map((category, index) => {
+                return (
+                  <StyledTreeItem
+                    nodeId={(Math.random() * 1000).toString()}
+                    labelText={category.name}
+                    labelIcon={SupervisorAccountIcon}
+                    labelInfo={category.creds.length.toString()}
+                    color="#1a73e8"
+                    bgColor="#e8f0fe"
+                    key={index}
+                  />
+                )
+              })}
+            </StyledTreeItem>
+          ))
+        )}
+
       </StyledTreeItem>
     </TreeView>
   );
