@@ -34,9 +34,7 @@ class DashboardCategoryCard extends React.Component {
             if (url[url.length - 1] == '/'){
                 url = url.substring(0,url.length-1)
             }
-//             const updatedUrl = url.substring(0, url.length - 1);
             const queryString = `${url}/${eng.type}/${eng.name}`
-            console.log("querystring", queryString)
             return <table className="responsive-table dark">
                 <tbody>
                 <tr>

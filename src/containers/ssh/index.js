@@ -11,19 +11,26 @@ class SSH extends Component {
 
     state = {
         info: null,
-        selectedMachine: null
+        selectedMachine: null,
+        engineName: null
     }
 
-    getRequiredEngine = (engineList) => {
-        return engineList.find(engine => engine.type === "ssh" && engine.name === "ssh5")
+    getRequiredEngine = (engineList, engName) => {
+        return engineList.find(engine => engine.type === "ssh" && engine.name === engName)
+    }
+
+    getEngineNameFromUrl = (url) => {
+        const locationSplitBySlash = url.split('/');
+        return locationSplitBySlash[locationSplitBySlash.length - 1];
     }
 
     async componentDidMount() {
-        const res = await API.get('api/engine/', { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } });
-        const mySSHEngine = this.getRequiredEngine(res.data);
+        const engineName = this.getEngineNameFromUrl(this.props.location.pathname);
 
-        const data = this.getData();
-        this.setState({ info: data });
+        const res = await API.get('api/engine/', { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } });
+        const mySSHEngine = this.getRequiredEngine(res.data, engineName);
+
+        this.setState({ info: mySSHEngine, engineName });
     }
 
     getData = () => {
@@ -79,9 +86,18 @@ class SSH extends Component {
         this.setState({ info: updatedInfo });
     }
 
+    getCAKey = async () => {
+        const res = await API.get(
+            `api/ssh/${this.state.engineName}/ca/public_key`,
+            { headers: { "auth-token": `Bearer ${localStorage.getItem("AUTH_TOKEN")}` } }
+        )
+        console.log(res.data.CAPublicKey);
+    }
+
     render() {
 
         const { info, selectedMachine } = this.state;
+        console.log(info)
 
         return (
             <SideLayout>
@@ -91,14 +107,14 @@ class SSH extends Component {
                     <div className={classes.CAConfig}>
                         {info && (
                             <div className="row">
-                                <div className="col s12 l6">
+                                <div className="col s12 l3">
                                     {info.status === 0 ? (
                                         <div className={classes.configText}>
                                             <button onClick={this.configureCA} className="waves-effect waves-light btn-large">Configure</button>
                                         </div>
                                     ) : (
                                             <div className={classes.configText}>
-                                                <button onClick={this.configureCA} className="waves-effect waves-light btn-large">
+                                                <button onClick={this.configureCA} className="circle waves-effect waves-light btn-large">
                                                     <i className="material-icons">check</i>
                                                 </button>
                                             </div>
@@ -123,8 +139,14 @@ class SSH extends Component {
                                             </div>
                                         </div>
                                     )}
-
                                 </div>
+                                    {info.status === 1 && (
+                                        <div className={classes.configBtn}>
+                                            <div>
+                                                <button onClick={this.getCAKey} className="waves-effect waves-light btn-large">Get Key</button>
+                                            </div>
+                                        </div>
+                                    )}
                             </div>
                         )}
                     </div>
@@ -170,9 +192,9 @@ class SSH extends Component {
                                     <tbody>
                                         {info.roles.map((machine, index) => (
                                             <tr key={index} onClick={() => this.getGenCreds(machine._id)}>
-                                                <td>{machine.remote_machine_ip}</td>
-                                                <td>{machine.remote_machine_username}</td>
-                                                <td>{machine.remote_machine_domain}</td>
+                                                <td>{machine.machine_ip}</td>
+                                                <td>{machine.machine_username}</td>
+                                                <td>{machine.machine_domain}</td>
                                             </tr>
                                         ))}
                                     </tbody>
