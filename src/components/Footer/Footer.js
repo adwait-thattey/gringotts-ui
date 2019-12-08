@@ -5,7 +5,7 @@ import Logo from '../Logo/Logo';
 const footer = (props) => (
     <footer className="page-footer #212121 grey darken-4">      
         <div className="row">
-            <div className="col l4 s12 m12">
+            <div className="col l4 s12 m6">
                 <div style={{ width: '6rem', height : '6rem', display: 'inline-block',}}>    
                     <div style={{ marginTop: '12px'}}>
                             <Logo />
@@ -17,10 +17,10 @@ const footer = (props) => (
                     passwords, keys, credentials,  tokens or just any data.
                 </p>
             </div>
-            <div className="col l4 s12 m12">
+            <div className="col l4 s12 m1">
                 
             </div>
-            <div className="col l4 s12 m12">
+            <div className="col l4 s12 m6">
                 <h3 className="white-text"><b>Services</b></h3>
                 <ul>
                     <li><a className="white-text text-lighten-4" href="#!">Credentials Manager</a></li>
@@ -30,7 +30,7 @@ const footer = (props) => (
                 </ul>
             </div>
         </div>       
-        <div className="footer-copyright #1976d2 blue darken-2">
+        <div className="footer-copyright cyan darken-4">
             <div style={{ margin: '0px auto', }}>
                 <h5>@2019 Gringotts Services</h5>
             </div>

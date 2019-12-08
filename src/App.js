@@ -16,7 +16,7 @@ function App(props) {
         <Route exact path="/auth" component={Auth} />
         <Route path="/about" component={About} />
         <Route path="/dashboard" component={Dashboard} exact/>
-        <Route path="/dashboard/kv" component={KV}/>
+        <Route path="/dashboard/kv" component={KV} />
         <Route path="/dashboard/aws" component={AWS} />
       </React.Fragment>
   );

@@ -9,9 +9,7 @@ const IconsBlock = (props) => {
                     <center><h3><b>Services</b></h3></center>
                     <br/><br/>
                 </div>
-                <div className='col l12'>
-                    {props.children}
-                </div>
+                {props.children}
             </div>
         </div>
     );

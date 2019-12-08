@@ -5,7 +5,7 @@ import Register from '../../components/auth/register';
 import Layout from '../../hoc/Layout/Layout';
 import axios from 'axios';
 import Webcam from 'react-webcam'
-
+import API from '../../utils/axios';
 import M from 'materialize-css';
 
 const videoConstraints = {
@@ -71,7 +71,7 @@ class Auth extends Component {
 			email: this.state.authFields.email,
 			password: this.state.authFields.password
 		}
-		axios.post('http://localhost:8000/api/auth/register', user)
+		API.post('api/auth/register', user, {headers: {"Content-Type": "application/json" }})
 			.then(response => {
 				console.log(response.data);
 			})
@@ -86,7 +86,7 @@ class Auth extends Component {
 			email: this.state.authFields.email,
 			password: this.state.authFields.password
 		}
-		axios.post('http://localhost:8000/api/auth/login', user)
+		API.post('api/auth/login', user, {headers: {"Content-Type": "application/json" }})
 			.then(response => {
 				localStorage.setItem('AUTH_TOKEN', response.data);
 				console.log(response.data);

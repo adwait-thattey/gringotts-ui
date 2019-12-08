@@ -1,0 +1,122 @@
+.roles-card {
+    margin: 2vh auto;
+    min-height: 30vh;
+    width: 95%;
+
+
+    &__inner {
+
+        font-size: 1.5rem;
+
+        padding: 0;
+        margin: 0;
+
+
+        font-family: 'Raleway', sans-serif;
+        font-weight: bolder;
+
+        //height: 50px;
+        overflow:auto;
+
+
+        &_icon {
+
+            padding-left: 0.5rem;
+            font-size: 2rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: bolder;
+        }
+
+        &_cell {
+            transition: .5s all;
+            padding-left: 1vw;
+
+            width:50%;
+            &:hover {
+                padding-left: 2vw;
+                cursor: pointer;
+                color: #283593;
+
+            }
+
+            &--selected {
+                color: #283593;
+                border-left: 8px solid #283593;
+            }
+        }
+
+    }
+
+    &__info {
+        font-size: 1.5rem;
+        padding: 0;
+        margin: 0;
+
+        font-family: 'Raleway', sans-serif;
+        font-weight: bolder;
+        position: relative;
+
+        &_image {
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+
+    &__about {
+
+        padding-top: .8rem;
+        padding-bottom: .8rem;
+    }
+
+
+}
+.role-cell {
+    transition: .5s all;
+    padding-left: 1vw;
+
+    width:100%;
+    &:hover {
+        padding-left: 2vw;
+        cursor: pointer;
+        color: #283593;
+        //text-decoration: underline;
+
+    }
+
+    &:hover::before {
+        content: '>  ';
+        padding-right: 0.5vw;
+        text-decoration: none;
+        font-size: 1.5rem;
+    }
+}
+.role-credentials{
+    overflow: auto;
+    min-height: 25vh; max-height: 25vh;
+    border: 1px; box-shadow: 0 0 2px 1px grey;
+    border-radius: 0px; padding: 15px;
+}
+.select{
+    width: 100%;
+    margin-top: 10px; padding: 0px 20px; 
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+
+
+#card:hover {
+    transform: translateY(-4%);
+    border-bottom: 4px solid #ff5252;
+    transition: 0.5s;
+}
+
+
+.engine-info-divider {
+    margin-bottom: 2rem;
+}
+a, u {
+    text-decoration: inherit;
+    color: inherit;
+}

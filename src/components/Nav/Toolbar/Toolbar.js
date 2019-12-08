@@ -6,16 +6,16 @@ import Logo from '../../Logo/Logo'
 const toolbar = (props) => (
 
 	<header className="header">
-        <nav className="#1976d2 blue darken-2">
+        <nav className="cyan darken-4">
             <div id="menu">
-                <ul className="left hide-on-med-and-down">
-                    <li>{props.toggleButton}</li>
+                <ul className="left">
+                    <li className="hide-on-med-and-down">{props.toggleButton}</li>
                     <li><a href="/"><Logo /></a></li>
                 </ul>
                 <a href="/" className="logoName" id="logo">GRINGOTTS</a>                
                 <ul className="right">
                     <li>
-                        <div className="center row hide-on-med-and-down">
+                        <div className="center row hide">
                             <div className="col s12 ">
                                 <div className="row" id="topbarsearch">
                                     <div className="input-field col s6 s12">
@@ -28,10 +28,10 @@ const toolbar = (props) => (
                             </div>
                         </div>
                     </li>
-					<ul className="right hide-on-med-and-down">
+					<ul className="right">
 						{/* <li ><a href="/"><b>Sign Up</b></a></li> */}
-						<li><a href="/"><b>Sign Out</b></a></li>
-                        <li></li>
+						<li><a href="/"><b>Sign In</b></a></li>
+                        <li><a href="/"><b>Sign Up</b></a></li>
 					</ul>     
                 </ul>
             </div>

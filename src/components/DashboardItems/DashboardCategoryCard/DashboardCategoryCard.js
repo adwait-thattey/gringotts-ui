@@ -37,25 +37,27 @@ class DashboardCategoryCard extends React.Component {
             return <table className="responsive-table dark">
                 <tbody>
                 <tr>
-                    <th>Type:</th>
+                    <th><b>Type:</b></th>
                     <td> {eng.type}</td>
-                    <th> Created On:</th>
+                    <th> <b>Created On:</b></th>
                     <td> {eng.createdOn}</td>
                 </tr>
 
                 <tr>
-                    <th> Secrets Count:</th>
+                    <th> <b>Secrets Count:</b></th>
                     <td> {eng.credCount}</td>
-                    <th > Health:</th>
+                    <th ><b> Health:</b></th>
                     <td colSpan="2"> {this.getEngineHealth(eng.health)}</td>
                 </tr>
 
                 <tr>
-                    <span style={{color:"blue"}}>
+                    <td>
                         <NavLink to={`${queryString}`} >
-                            <TableCell content="Go to Engine"/>
+                            <span style={{color:"blue"}}> Go to Engine </span> 
+                            <span className="category-card__inner_icon">&gt;</span>
                         </NavLink>
-                    </span>
+                    </td>
+                    
                     {/*<th colSpan="2" style={{color:"green",fontWeight:"bold",cursor:"pointer", textDecoration:"underline"}}> <a style={{textDecoration:"none"}} href="#">Go to Engine &gt;</a> </th>*/}
                 </tr>
                 </tbody>
@@ -108,7 +110,7 @@ class DashboardCategoryCard extends React.Component {
                                                          createEngine = {this.props.createEngine}
 
                                             />
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                                 <div className="col s12 l6 card small category-card__info">

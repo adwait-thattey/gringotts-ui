@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import credentialsImage from '../../images/components/cards/Credentials.jpeg';
 import dynmCreds from '../../images/components/cards/DynmCreds.png';
 import sshImage from '../../images/components/cards/ssh.png';
@@ -8,9 +7,24 @@ import Layout from '../../hoc/Layout/Layout';
 import IconsBlock from '../../components/DashboardItems/IconsBlock/IconsBlock';
 import DashboardIcons from '../../components/DashboardItems/IconsBlock/DashboardIcons/DashboardIcons';
 import DashboardCategoryCard from "../../components/DashboardItems/DashboardCategoryCard/DashboardCategoryCard";
-
 import API from '../../utils/axios';
-
+const dummyEngines = [
+    {
+        id: 1,
+        name: 'kv1',
+        type: 'kv',
+        createdOn: new Date('5 Dec 2019').toDateString(),
+        health: true,
+        credCount: 4},
+    {
+        id: 2,
+        name: 'aws1',
+        type: 'aws',
+        createdOn: new Date('6 Dec 2019').toDateString(),
+        health: true,
+        credCount: 5
+    },
+]
 class Dashboard extends Component {
     state = {
         cards: {
@@ -68,9 +82,8 @@ class Dashboard extends Component {
             },
 
         ],
-        engines: [],
+        engines: dummyEngines,
         token: localStorage.getItem("AUTH_TOKEN")
-
     };
 
     createEngine = type => {
@@ -79,7 +92,16 @@ class Dashboard extends Component {
         // for sample
         console.log("create new engine", type);
         const engines = this.state.engines;
-        engines.push({id:"xyz",name:"New Engine", type:type, ownedBy:"Sample user", createdOn:"sample date", health:true})
+    
+        engines.push({
+            id:"xyz",
+            name:"New Engine",
+            type: type, 
+            roles: [],
+            createdOn:"sample date", 
+            health:true,
+            status: 0,            
+        })
 
         this.setState({engines: engines});
     };
@@ -97,7 +119,7 @@ class Dashboard extends Component {
     getRequiredInfo = (userObj) => {
         let obtainedEngines = [];
 
-        userObj.map(engine => {
+        userObj.map(engine => (
             obtainedEngines.push({
                 id: engine.id,
                 name: engine.name,
@@ -106,7 +128,7 @@ class Dashboard extends Component {
                 health: true,
                 credCount: engine.credCount
             })
-        })
+        ))
 
         return obtainedEngines;
     }
@@ -115,7 +137,7 @@ class Dashboard extends Component {
 
         const transformedIcons = Object.keys(this.state.cards)
             .map((c, index) => (
-                <div className="col s12 m6 l3" key={index}>
+                <div className="col s12 m3 l3" key={index}>
                     <DashboardIcons
                         image={this.state.cards[c].Image}
                         title={this.state.cards[c].Title}
@@ -143,13 +165,14 @@ class Dashboard extends Component {
         return (
             <Layout>
                 <section>
-                    <IconsBlock> {transformedIcons} </IconsBlock>
+                    <IconsBlock> <React.Fragment>{transformedIcons}</React.Fragment> </IconsBlock>
                     {categoryCards}
                 </section>
             </Layout>
         );
     }
 }
+
 
 export default Dashboard;
 
